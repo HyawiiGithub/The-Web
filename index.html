@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UOG Changelog</title>
+
+<style>
+    :root {
+        --bg: #0d0d0d;
+        --text: #e6e6e6;
+        --card: #1a1a1a;
+        --accent: #4da6ff;
+        --glow: 0 0 10px var(--accent), 0 0 20px var(--accent);
+    }
+
+    body.light {
+        --bg: #f2f2f2;
+        --text: #111;
+        --card: #fff;
+        --accent: #0077ff;
+        --glow: 0 0 10px var(--accent);
+    }
+
+    body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        transition: background 0.4s, color 0.4s;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+        width: 240px;
+        background: #111;
+        padding: 20px;
+        border-right: 2px solid #333;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+    }
+
+    .sidebar h2 {
+        color: var(--accent);
+        text-shadow: var(--glow);
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .sidebar a {
+        display: block;
+        padding: 10px 0;
+        color: var(--text);
+        text-decoration: none;
+        opacity: 0.8;
+        transition: 0.2s;
+    }
+
+    .sidebar a:hover {
+        opacity: 1;
+        color: var(--accent);
+        text-shadow: var(--glow);
+    }
+
+    /* MAIN CONTENT */
+    .content {
+        margin-left: 260px;
+        padding: 40px;
+        width: calc(100% - 260px);
+    }
+
+    header {
+        text-align: center;
+        padding: 40px 20px;
+        border-bottom: 2px solid #333;
+        margin-bottom: 40px;
+    }
+
+    header h1 {
+        font-size: 3rem;
+        color: var(--accent);
+        text-shadow: var(--glow);
+        margin: 0;
+    }
+
+    /* TOGGLE BUTTON */
+    .toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: var(--card);
+        border: 2px solid var(--accent);
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        color: var(--accent);
+        text-shadow: var(--glow);
+        transition: 0.3s;
+    }
+
+    .toggle:hover {
+        box-shadow: var(--glow);
+    }
+
+    /* COLLAPSIBLE SECTIONS */
+    details {
+        background: var(--card);
+        border-left: 4px solid var(--accent);
+        border-radius: 6px;
+        margin-bottom: 20px;
+        padding: 15px 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    summary {
+        font-size: 1.3rem;
+        color: var(--accent);
+        text-shadow: var(--glow);
+        outline: none;
+    }
+
+    details[open] {
+        box-shadow: var(--glow);
+    }
+
+    ul {
+        margin-top: 10px;
+        padding-left: 20px;
+    }
+
+    footer {
+        text-align: center;
+        margin-top: 40px;
+        opacity: 0.7;
+    }
+
+    a {
+        color: var(--accent);
+    }
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>UOG Menu</h2>
+    <a href="#v100">Version 1.0.0</a>
+    <a href="#v110">Version 1.1.0</a>
+    <a href="#v120">Version 1.2.0</a>
+</div>
+
+<div class="content">
+
+<button class="toggle" onclick="toggleTheme()">Toggle Theme</button>
+
+<header>
+    <h1>Union of Gaming Mod</h1>
+    <p>Official Changelog</p>
+</header>
+
+<details id="v100">
+    <summary>Version 1.0.0</summary>
+    <ul>
+        <li>Initial release of the Union of Gaming mod.</li>
+        <li>Added core gameplay systems.</li>
+        <li>Introduced new UI elements and improved performance.</li>
+    </ul>
+</details>
+
+<details id="v110">
+    <summary>Version 1.1.0</summary>
+    <ul>
+        <li>Added new factions and expanded diplomacy options.</li>
+        <li>Improved AI behavior and balancing.</li>
+        <li>Fixed minor bugs reported by early testers.</li>
+    </ul>
+</details>
+
+<details id="v120">
+    <summary>Version 1.2.0</summary>
+    <ul>
+        <li>New weapons and crafting recipes.</li>
+        <li>Optimized loading times by 20%.</li>
+        <li>Updated textures and added new sound effects.</li>
+    </ul>
+</details>
+
+<footer>
+    <p>Created by Hyawii & Contributors</p>
+    <p>Mod Link: <a href="#">NOT READY FOR PUBLIC USAGE YET</a></p>
+</footer>
+
+</div>
+
+<script>
+function toggleTheme() {
+    document.body.classList.toggle("light");
+}
+</script>
+
+</body>
+</html>
