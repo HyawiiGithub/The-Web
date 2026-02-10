@@ -7,33 +7,83 @@
 
 <style>
 :root {
-  --bg:#0d0d0d; --text:#e6e6e6; --card:#1a1a1a; --accent:#4da6ff;
+  --bg:#0d0d0d;
+  --text:#e6e6e6;
+  --card:#1a1a1a;
+  --accent:#4da6ff;
 }
+
 body {
-  margin:0; font-family:Segoe UI,sans-serif;
-  background:var(--bg); color:var(--text); display:flex;
+  margin:0;
+  font-family:Segoe UI,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
 }
+
 .sidebar {
-  width:240px; background:#111; padding:20px;
-  position:fixed; height:100vh; overflow:auto;
+  width:240px;
+  background:#111;
+  padding:20px;
+  position:fixed;
+  height:100vh;
+  overflow:auto;
 }
-.content { margin-left:260px; padding:40px; width:100%; }
-details { background:var(--card); margin-bottom:20px; padding:15px; }
-summary { color:var(--accent); font-size:1.2rem; cursor:pointer; }
+
+.content {
+  margin-left:260px;
+  padding:40px;
+  width:100%;
+}
+
+details {
+  background:var(--card);
+  margin-bottom:20px;
+  padding:15px;
+}
+
+summary {
+  color:var(--accent);
+  font-size:1.2rem;
+  cursor:pointer;
+}
+
 button,input,textarea {
-  width:100%; margin-top:10px; padding:10px;
-  background:#000; color:#fff; border:1px solid #444;
+  width:100%;
+  margin-top:10px;
+  padding:10px;
+  background:#000;
+  color:#fff;
+  border:1px solid #444;
 }
-.deleteBtn { background:#ff4444; display:none; }
+
+.deleteBtn {
+  background:#ff4444;
+  margin-top:10px;
+}
+
+/* LOGIN PANEL */
 #loginPanel {
-  position:fixed; top:20px; right:20px; width:260px;
-  background:var(--card); padding:15px; border:2px solid var(--accent);
+  position:fixed;
+  top:20px;
+  right:20px;
+  width:260px;
+  background:var(--card);
+  padding:15px;
+  border:2px solid var(--accent);
   z-index:9999;
 }
+
+/* BANNED SCREEN (FIXED) */
 #bannedScreen {
-  display:none; position:fixed; inset:0;
-  background:black; color:red; font-size:2rem;
-  display:flex; align-items:center; justify-content:center;
+  display:none;
+  position:fixed;
+  inset:0;
+  background:black;
+  color:red;
+  font-size:2rem;
+  align-items:center;
+  justify-content:center;
   z-index:10000;
 }
 </style>
@@ -62,21 +112,22 @@ button,input,textarea {
 </div>
 
 <h1>Union of Gaming Mod</h1>
+
 <div id="changelogs"></div>
 
 <div id="suggestionBox" style="display:none">
-  <h3>Suggestions</h3>
+  <h3>Submit a Suggestion</h3>
   <textarea id="suggestionText"></textarea>
   <button onclick="submitSuggestion()">Submit</button>
 </div>
 
 <div id="adminPanel" style="display:none">
   <h3>Add Changelog</h3>
-  <input id="versionInput">
-  <textarea id="changesInput"></textarea>
+  <input id="versionInput" placeholder="Version">
+  <textarea id="changesInput" placeholder="One change per line"></textarea>
   <button onclick="addChangelog()">Add</button>
 
-  <h3>Suggestions</h3>
+  <h3>User Suggestions</h3>
   <ul id="suggestionList"></ul>
 
   <h3>Audit Logs</h3>
@@ -102,107 +153,171 @@ const changelogRef = db.ref("uog_changelogs");
 const suggestionsRef = db.ref("suggestions");
 const auditRef = db.ref("audit_logs");
 
-/* ================= GLOBAL STATE ================= */
+/* ================= GLOBAL ================= */
 let currentUser = null;
 let isAdmin = false;
 
 const ADMIN_HASH =
 "0cd189c90f1d2420cea81ec6f2aec5dcf99bd152d874e3e5b0590a387b62c67a";
 
+/* AUTO-CREATE ADMIN (CRITICAL FIX) */
+usersRef.child("Hyawii").once("value", snap => {
+  if (!snap.exists()) {
+    usersRef.child("Hyawii").set({
+      password: ADMIN_HASH,
+      role: "admin",
+      banned: false
+    });
+  }
+});
+
 /* ================= UTIL ================= */
-async function hashPassword(t){
-  const b = await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));
-  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
+async function hashPassword(text){
+  const buf = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(text)
+  );
+  return [...new Uint8Array(buf)]
+    .map(b=>b.toString(16).padStart(2,"0"))
+    .join("");
 }
 
 function logAudit(action, target=""){
   auditRef.push({
     user: currentUser || "SYSTEM",
-    action, target,
+    action,
+    target,
     time: new Date().toISOString()
   });
 }
 
 /* ================= AUTH ================= */
 async function login(){
-  const u=loginUser.value.trim(), p=loginPass.value;
-  const h=await hashPassword(p);
-  usersRef.child(u).once("value",s=>{
-    const d=s.val();
-    if(!d) return alert("No user");
-    if(d.banned){ bannedScreen.style.display="flex"; document.body.innerHTML=""; return; }
-    if(d.password!==h) return alert("Wrong password");
-    currentUser=u; isAdmin=d.role==="admin";
-    loginPanel.style.display="none";
-    suggestionBox.style.display="block";
+  const u = loginUser.value.trim();
+  const p = loginPass.value;
+  if (!u || !p) return alert("Missing fields");
+
+  const h = await hashPassword(p);
+
+  usersRef.child(u).once("value", snap => {
+    const d = snap.val();
+    if (!d) return alert("User not found");
+
+    if (d.banned) {
+      bannedScreen.style.display = "flex";
+      return;
+    }
+
+    if (d.password !== h) return alert("Wrong password");
+
+    currentUser = u;
+    isAdmin = d.role === "admin";
+
+    loginPanel.style.display = "none";
+    suggestionBox.style.display = "block";
+
     loadChangelogs();
-    if(isAdmin){ adminPanel.style.display="block"; loadSuggestions(); loadAudits(); }
     logAudit("login");
+
+    if (isAdmin) {
+      adminPanel.style.display = "block";
+      loadSuggestions();
+      loadAudits();
+    }
   });
 }
 
 async function register(){
-  const u=loginUser.value.trim(), p=loginPass.value;
-  const h=await hashPassword(p);
-  usersRef.child(u).once("value",s=>{
-    if(s.exists()) return alert("Exists");
-    usersRef.child(u).set({password:h,role:"user",banned:false});
-    logAudit("register",u);
-    alert("Registered. Login.");
+  const u = loginUser.value.trim();
+  const p = loginPass.value;
+  if (!u || !p) return alert("Missing fields");
+
+  const h = await hashPassword(p);
+
+  usersRef.child(u).once("value", snap => {
+    if (snap.exists()) return alert("User exists");
+
+    usersRef.child(u).set({
+      password: h,
+      role: "user",
+      banned: false
+    });
+
+    logAudit("register", u);
+    alert("Registered. Please login.");
   });
 }
 
 /* ================= CHANGELOGS ================= */
-function renderChangelog(v,c){
-  const d=document.createElement("details");
-  d.innerHTML="<summary>Version "+v+"</summary>";
-  const ul=document.createElement("ul");
-  c.forEach(x=>{ const li=document.createElement("li"); li.textContent=x; ul.appendChild(li);});
+function renderChangelog(v, c){
+  const d = document.createElement("details");
+  const s = document.createElement("summary");
+  s.textContent = "Version " + v;
+  d.appendChild(s);
+
+  const ul = document.createElement("ul");
+  c.forEach(x=>{
+    const li=document.createElement("li");
+    li.textContent=x;
+    ul.appendChild(li);
+  });
   d.appendChild(ul);
-  if(isAdmin){
-    const b=document.createElement("button");
-    b.textContent="Delete"; b.className="deleteBtn";
-    b.onclick=()=>{ d.remove(); saveChangelogs(); logAudit("delete_changelog",v); };
-    b.style.display="block"; d.appendChild(b);
+
+  if (isAdmin) {
+    const b = document.createElement("button");
+    b.textContent = "Delete";
+    b.className = "deleteBtn";
+    b.onclick = () => {
+      d.remove();
+      saveChangelogs();
+      logAudit("delete_changelog", v);
+    };
+    d.appendChild(b);
   }
+
   changelogs.appendChild(d);
 }
 
 function saveChangelogs(){
-  const data=[...document.querySelectorAll("#changelogs details")].map(d=>({
-    version:d.querySelector("summary").textContent.replace("Version ",""),
-    changes:[...d.querySelectorAll("li")].map(li=>li.textContent)
+  const data = [...document.querySelectorAll("#changelogs details")].map(d=>({
+    version: d.querySelector("summary").textContent.replace("Version ",""),
+    changes: [...d.querySelectorAll("li")].map(li=>li.textContent)
   }));
   changelogRef.set(data);
 }
 
 function addChangelog(){
-  renderChangelog(versionInput.value,changesInput.value.split("\n"));
+  const v = versionInput.value.trim();
+  const c = changesInput.value.split("\n").filter(x=>x.trim());
+  if (!v || !c.length) return alert("Invalid");
+  renderChangelog(v, c);
   saveChangelogs();
-  logAudit("add_changelog",versionInput.value);
+  logAudit("add_changelog", v);
 }
 
 function loadChangelogs(){
-  changelogRef.on("value",s=>{
-    changelogs.innerHTML="";
-    s.val()?.forEach(e=>renderChangelog(e.version,e.changes));
+  changelogRef.on("value", snap => {
+    changelogs.innerHTML = "";
+    snap.val()?.forEach(e=>renderChangelog(e.version,e.changes));
   });
 }
 
 /* ================= SUGGESTIONS ================= */
 function submitSuggestion(){
-  suggestionsRef.push({user:currentUser,text:suggestionText.value});
-  logAudit("suggestion",suggestionText.value);
-  suggestionText.value="";
+  const t = suggestionText.value.trim();
+  if (!t) return;
+  suggestionsRef.push({ user: currentUser, text: t });
+  logAudit("suggestion", t);
+  suggestionText.value = "";
 }
 
 function loadSuggestions(){
-  suggestionsRef.on("value",s=>{
-    suggestionList.innerHTML="";
-    s.forEach(x=>{
+  suggestionsRef.on("value", snap => {
+    suggestionList.innerHTML = "";
+    snap.forEach(x=>{
       const d=x.val();
       const li=document.createElement("li");
-      li.innerHTML=`<b>${d.user}</b>: ${d.text}
+      li.innerHTML = `<b>${d.user}</b>: ${d.text}
       <button onclick="banUser('${d.user}')">Ban</button>`;
       suggestionList.appendChild(li);
     });
@@ -211,18 +326,19 @@ function loadSuggestions(){
 
 /* ================= BAN ================= */
 function banUser(u){
-  usersRef.child(u).update({banned:true});
-  logAudit("ban",u);
+  if (!confirm("Ban "+u+"?")) return;
+  usersRef.child(u).update({ banned:true });
+  logAudit("ban", u);
 }
 
-/* ================= AUDIT LOGS ================= */
+/* ================= AUDIT ================= */
 function loadAudits(){
-  auditRef.limitToLast(50).on("value",s=>{
-    auditList.innerHTML="";
-    s.forEach(x=>{
+  auditRef.limitToLast(50).on("value", snap => {
+    auditList.innerHTML = "";
+    snap.forEach(x=>{
       const d=x.val();
       const li=document.createElement("li");
-      li.textContent=`[${d.time}] ${d.user} → ${d.action} ${d.target||""}`;
+      li.textContent = `[${d.time}] ${d.user} → ${d.action} ${d.target||""}`;
       auditList.appendChild(li);
     });
   });
