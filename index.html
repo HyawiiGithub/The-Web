@@ -1,236 +1,109 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>UOG Changelogs</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<style>
-:root {
-  --bg:#05070f;
-  --card:#0c1224;
-  --neon:#00eaff;
-  --neon2:#7c4dff;
-}
-
-body {
-  margin:0;
-  font-family:Segoe UI,system-ui;
-  background:radial-gradient(circle at top,#0b132b,#02040a);
-  color:#e6f1ff;
-}
-
-.app {
-  display:grid;
-  grid-template-columns:240px 1fr;
-  min-height:100vh;
-}
-
-.sidebar {
-  padding:20px;
-  background:#040814;
-  border-right:1px solid rgba(0,234,255,.3);
-}
-
-.content {
-  padding:40px;
-}
-
-.card {
-  background:var(--card);
-  border:1px solid rgba(0,234,255,.35);
-  box-shadow:0 0 20px rgba(0,234,255,.2);
-  border-radius:10px;
-  padding:20px;
-  margin-bottom:20px;
-}
-
-h1,h2,h3 {
-  color:var(--neon);
-  text-shadow:0 0 10px rgba(0,234,255,.6);
-}
-
-input,textarea,button {
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  background:#02040a;
-  color:white;
-  border:1px solid rgba(0,234,255,.4);
-  border-radius:6px;
-}
-
-button {
-  cursor:pointer;
-  color:var(--neon);
-}
-
-button:hover {
-  background:rgba(0,234,255,.15);
-}
-
-#loginPanel {
-  position:fixed;
-  top:20px;
-  right:20px;
-  width:260px;
-  z-index:1000;
-}
-
-details {
-  margin-bottom:10px;
-}
-</style>
-
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Vanguard Components — Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
-
 <body>
-
-<div class="app">
-  <div class="sidebar">
-    <h2>UOG</h2>
-  </div>
-
-  <div class="content">
-
-    <div id="loginPanel" class="card">
-      <h3>Login</h3>
-      <input id="userInput" placeholder="Username">
-      <input id="passInput" type="password" placeholder="Password">
-      <button onclick="login()">Login</button>
-      <button onclick="register()">Register</button>
+  <header class="topbar">
+    <div class="brand">
+      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36'><rect width='36' height='36' rx='6' fill='%230b1220'/><text x='50%' y='55%' font-size='18' fill='%23fff' font-family='Arial' text-anchor='middle'>VC</text></svg>" alt="logo" />
+      <div>
+        <h1>Vanguard Components</h1>
+        <p class="muted">Gaming & PC Parts — Premium Hardware, Pro Service</p>
+      </div>
     </div>
-
-    <h1>Changelogs</h1>
-    <div id="changelogs"></div>
-
-    <div id="adminPanel" class="card" style="display:none">
-      <h3>Admin Panel</h3>
-      <input id="verInput" placeholder="Version">
-      <textarea id="chgInput" placeholder="One change per line"></textarea>
-      <button onclick="addChangelog()">Add</button>
+    <div class="meta">
+      <div><strong>Age</strong><span>1 year 2 months</span></div>
+      <div><strong>Employees</strong><span>36</span></div>
+      <div><strong>Status</strong><span class="profit">Very profitable</span></div>
     </div>
+  </header>
 
-  </div>
-</div>
+  <main class="container">
+    <section class="kpis">
+      <div class="card">
+        <h3>Total Revenue (YTD)</h3>
+        <p id="kpi-revenue">$0</p>
+      </div>
+      <div class="card">
+        <h3>Net Profit (YTD)</h3>
+        <p id="kpi-profit">$0</p>
+      </div>
+      <div class="card">
+        <h3>Profit Margin</h3>
+        <p id="kpi-margin">0%</p>
+      </div>
+      <div class="card">
+        <h3>Monthly Active SKUs</h3>
+        <p id="kpi-skus">128</p>
+      </div>
+    </section>
 
-<script>
-/* ================= FIREBASE ================= */
-firebase.initializeApp({
-  apiKey: "AIzaSyD9TWP_zvIbGQuOyjtE6aliFIfBx23wdyY",
-  authDomain: "changelogs-website.firebaseapp.com",
-  databaseURL: "https://changelogs-website-default-rtdb.firebaseio.com",
-  projectId: "changelogs-website"
-});
+    <section class="chart-panel">
+      <div class="panel">
+        <h2>Live Profit Stream</h2>
+        <p class="muted">Simulated sales events stream in every second. Chart shows cumulative profit over time.</p>
+        <canvas id="profitChart" height="120"></canvas>
+        <div class="controls">
+          <label>Sales intensity:
+            <input id="intensity" type="range" min="0.2" max="3" step="0.1" value="1" />
+          </label>
+          <button id="pauseBtn">Pause</button>
+          <button id="resetBtn">Reset</button>
+        </div>
+      </div>
 
-const db = firebase.database();
-const usersRef = db.ref("users");
-const changelogsRef = db.ref("changelogs");
+      <div class="panel small">
+        <h3>Latest Sales Feed</h3>
+        <ul id="feed" class="feed"></ul>
+      </div>
+    </section>
 
-/* ================= ADMIN HASH ================= */
-/* password: admin123 */
-const ADMIN_HASH =
-"240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
+    <section class="reports">
+      <div class="panel">
+        <h2>Quarterly Reports (First Year + 2 Months)</h2>
+        <p class="muted">Company has existed for 14 months. Below are generated quarterly summaries and KPIs.</p>
+        <table id="reportsTable">
+          <thead>
+            <tr>
+              <th>Quarter</th>
+              <th>Period</th>
+              <th>Revenue</th>
+              <th>Net Profit</th>
+              <th>Profit Margin</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="report-actions">
+          <button id="exportCsv">Export CSV</button>
+          <button id="downloadPdf" disabled>Download PDF (browser)</button>
+        </div>
+      </div>
+    </section>
 
-/* ================= SESSION ================= */
-let currentUser = localStorage.getItem("user");
-let isAdmin = localStorage.getItem("admin") === "true";
+    <section class="about panel">
+      <h2>About Vanguard Components</h2>
+      <p>Vanguard Components is a high-growth gaming and PC parts company focused on premium GPUs, CPUs, motherboards, and custom builds for enthusiasts and esports teams. Founded 14 months ago, the company runs a lean team of <strong>36</strong> employees and has achieved strong margins through direct-to-consumer sales, B2B partnerships, and a subscription-based warranty & tuning service.</p>
+      <ul>
+        <li><strong>Core products:</strong> GPUs, CPUs, motherboards, custom builds, cooling solutions</li>
+        <li><strong>Channels:</strong> eCommerce, wholesale, enterprise gaming rigs</li>
+        <li><strong>Competitive edge:</strong> Rapid fulfillment, curated high-margin bundles, premium support</li>
+      </ul>
+    </section>
+  </main>
 
-if (currentUser) restoreSession();
+  <footer class="footer">
+    <small>© <span id="year"></span> Vanguard Components — Internal Dashboard (demo)</small>
+  </footer>
 
-/* ================= UTIL ================= */
-async function sha256(text) {
-  const buf = await crypto.subtle.digest(
-    "SHA-256",
-    new TextEncoder().encode(text)
-  );
-  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
-}
-
-/* ================= AUTH ================= */
-async function login() {
-  const u = userInput.value.trim();
-  const p = passInput.value;
-  const h = await sha256(p);
-
-  usersRef.child(u).once("value").then(snap => {
-    const d = snap.val();
-    if (!d) return alert("User not found");
-    if (d.password !== h) return alert("Wrong password");
-
-    currentUser = u;
-    isAdmin = d.role === "admin";
-
-    localStorage.setItem("user", u);
-    localStorage.setItem("admin", isAdmin);
-
-    restoreSession();
-  });
-}
-
-async function register() {
-  const u = userInput.value.trim();
-  const p = passInput.value;
-  if (!u || !p) return alert("Missing fields");
-
-  const h = await sha256(p);
-
-  usersRef.child(u).once("value").then(s => {
-    if (s.exists()) return alert("User exists");
-
-    usersRef.child(u).set({
-      password: h,
-      role: "user"
-    });
-
-    alert("Registered. Login now.");
-  });
-}
-
-/* ================= RESTORE ================= */
-function restoreSession() {
-  loginPanel.style.display = "none";
-  if (isAdmin) adminPanel.style.display = "block";
-}
-
-/* ================= CHANGELOGS ================= */
-function loadChangelogs() {
-  changelogsRef.on("value", snap => {
-    changelogs.innerHTML = "";
-    snap.forEach(s => {
-      const d = s.val();
-      const el = document.createElement("details");
-      el.innerHTML = `<summary>${d.version}</summary>`;
-      const ul = document.createElement("ul");
-      d.changes.forEach(c=>{
-        const li=document.createElement("li");
-        li.textContent=c;
-        ul.appendChild(li);
-      });
-      el.appendChild(ul);
-      changelogs.appendChild(el);
-    });
-  });
-}
-
-loadChangelogs();
-
-function addChangelog() {
-  const v = verInput.value;
-  const c = chgInput.value.split("\n").filter(Boolean);
-  if (!v || !c.length) return alert("Missing data");
-
-  changelogsRef.push({
-    version: v,
-    changes: c
-  });
-
-  verInput.value = "";
-  chgInput.value = "";
-}
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
+
