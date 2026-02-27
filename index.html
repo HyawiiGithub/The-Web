@@ -37,7 +37,7 @@
         }
 
         .parliament {
-            max-width: 1300px;
+            max-width: 1400px;
             width: 100%;
             z-index: 10;
             display: flex;
@@ -153,6 +153,41 @@
             cursor: pointer;
         }
 
+        /* tab navigation */
+        .tab-bar {
+            display: flex;
+            gap: 5px;
+            background: #2a0303;
+            border: 2px solid #b30045;
+            border-bottom: none;
+            padding: 0 10px;
+        }
+        
+        .tab {
+            padding: 15px 30px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: #3f1a1a;
+            border: 2px solid #830000;
+            border-bottom: none;
+            color: #ffb3b3;
+            letter-spacing: 2px;
+        }
+        
+        .tab.active {
+            background: #8b1a1a;
+            color: white;
+            border-color: #ff8888;
+            position: relative;
+            top: 2px;
+        }
+        
+        .tab:hover {
+            background: #a32929;
+        }
+
         /* live indicator + speaker controls */
         .live-badge {
             display: flex;
@@ -170,6 +205,7 @@
             display: flex;
             gap: 15px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .public-toggle {
@@ -194,6 +230,33 @@
             color: white;
             padding: 8px 20px;
             font-size: 1.2rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .timer-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #2a2a2a;
+            padding: 5px 15px;
+            border: 2px solid #ffaa00;
+        }
+        
+        .timer-input {
+            background: #1f0404;
+            color: #ffb3b3;
+            border: 2px solid #a10022;
+            padding: 5px;
+            width: 60px;
+            font-size: 1.1rem;
+        }
+        
+        .timer-set-btn {
+            background: #8b0000;
+            color: white;
+            border: 2px solid #ff7373;
+            padding: 5px 15px;
             cursor: pointer;
             font-weight: bold;
         }
@@ -295,6 +358,43 @@
             font-weight: bold;
             letter-spacing: 1px;
             text-transform: uppercase;
+        }
+
+        .timer-box {
+            background: #2d0c0c;
+            padding: 15px;
+            margin: 20px 0;
+            border: 2px solid #ffaa00;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+        
+        .timer-expired {
+            color: #ff6e6e;
+            font-weight: bold;
+            animation: pulse 1s infinite;
+        }
+        
+        .timer-active {
+            color: #aaffaa;
+        }
+        
+        .result-box {
+            background: #1e0101;
+            padding: 15px;
+            margin: 15px 0;
+            border: 2px solid #ffcc00;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+        
+        .result-pass {
+            color: #aaffaa;
+        }
+        
+        .result-fail {
+            color: #ff6e6e;
         }
 
         .voting-hammer {
@@ -590,7 +690,7 @@
 <body>
     <div class="parliament">
 
-        <!-- header - ORIGINAL TITLE RESTORED -->
+        <!-- header -->
         <div class="supreme-header">
             <h1>☭ SUPREME COURT OF THE UNION OF GAMING
                 <small>REVOLUTIONARY COURT RULINGS · LIVE SOVIET</small>
@@ -614,6 +714,12 @@
             <div id="loggedInDisplay" style="display: flex; align-items: center; gap: 15px;"></div>
         </div>
 
+        <!-- tab navigation -->
+        <div class="tab-bar">
+            <div class="tab active" id="tabCases">📋 COURT CASES</div>
+            <div class="tab" id="tabBills">📜 SUPREME BILLS</div>
+        </div>
+
         <!-- live indicator + speaker controls -->
         <div class="live-badge">
             <div style="display: flex; align-items: center; gap: 15px;">
@@ -633,59 +739,114 @@
             <span class="court-member speaker">Speaker of Supreme Court</span>
         </div>
 
-        <!-- MAIN two columns -->
-        <div class="split-panel">
-            <!-- LEFT: case registry + create new + vote log -->
-            <div class="case-list-panel">
-                <div class="list-header">📜 CASE REGISTRY (DOCKET)</div>
-                <ul class="case-registry" id="caseRegistryList"></ul>
-                
-                <!-- PUBLIC VOTE LOG (visible to everyone) -->
-                <div class="vote-log-panel">
-                    <div class="log-header">
-                        <span>📢 PUBLIC VOTE LOG</span>
-                        <span id="logStatus">🔴 PRIVATE</span>
-                    </div>
-                    <div class="log-entries" id="voteLogEntries">
-                        <div class="log-entry">⏳ Waiting for votes...</div>
-                    </div>
-                </div>
-
-                <div class="new-case-form">
-                    <h3>➕ FILE NEW CASE</h3>
-                    <div class="form-row">
-                        <label>Defendant</label>
-                        <input type="text" id="newDefendant" placeholder="e.g. osimate">
-                    </div>
-                    <div class="form-row">
-                        <label>Crime 1</label>
-                        <input type="text" id="newCrime1" placeholder="hungarian">
-                    </div>
-                    <div class="form-row">
-                        <label>Crime 2</label>
-                        <input type="text" id="newCrime2" placeholder="whispers of counter revolutionary ideas">
-                    </div>
-                    <div class="form-row">
-                        <label>Proposed sentence</label>
-                        <input type="text" id="newSentence" placeholder="Extermination">
-                    </div>
-                    <button class="create-btn" id="createCaseBtn">☭ SUBMIT TO PEOPLE'S REGISTRY</button>
+        <!-- MAIN two columns - CASES TAB -->
+        <div id="casesSection">
+            <div class="split-panel">
+                <!-- LEFT: case registry + create new + vote log -->
+                <div class="case-list-panel">
+                    <div class="list-header">📋 COURT CASES REGISTRY</div>
+                    <ul class="case-registry" id="caseRegistryList"></ul>
                     
-                    <!-- Admin delete button -->
-                    <div id="adminDeleteContainer" style="display: none;">
-                        <button class="delete-all-btn" id="deleteAllCasesBtn">☭ DELETE ALL CASE HISTORIES (ADMIN ONLY)</button>
+                    <!-- PUBLIC VOTE LOG -->
+                    <div class="vote-log-panel">
+                        <div class="log-header">
+                            <span>📢 PUBLIC VOTE LOG</span>
+                            <span id="logStatus">🔴 PRIVATE</span>
+                        </div>
+                        <div class="log-entries" id="voteLogEntries">
+                            <div class="log-entry">⏳ Waiting for votes...</div>
+                        </div>
+                    </div>
+
+                    <div class="new-case-form">
+                        <h3>➕ FILE NEW CASE</h3>
+                        <div class="form-row">
+                            <label>Defendant</label>
+                            <input type="text" id="newDefendant" placeholder="e.g. osimate">
+                        </div>
+                        <div class="form-row">
+                            <label>Crime 1</label>
+                            <input type="text" id="newCrime1" placeholder="hungarian">
+                        </div>
+                        <div class="form-row">
+                            <label>Crime 2</label>
+                            <input type="text" id="newCrime2" placeholder="whispers of counter revolutionary ideas">
+                        </div>
+                        <div class="form-row">
+                            <label>Proposed sentence</label>
+                            <input type="text" id="newSentence" placeholder="Extermination">
+                        </div>
+                        <button class="create-btn" id="createCaseBtn">☭ SUBMIT TO COURT REGISTRY</button>
                     </div>
                 </div>
-            </div>
 
-            <!-- RIGHT: active case voting panel -->
-            <div class="active-case-panel" id="activeCasePanel">
-                <div class="case-panel-header">
-                    <span>ACTIVE CASE № <span id="activeCaseId">001</span></span>
-                    <span>☭ PEOPLE'S VOTE</span>
+                <!-- RIGHT: active case voting panel -->
+                <div class="active-case-panel" id="activeCasePanel">
+                    <div class="case-panel-header">
+                        <span>ACTIVE CASE № <span id="activeCaseId">001</span></span>
+                        <span>☭ PEOPLE'S VOTE</span>
+                    </div>
+                    <div class="case-body" id="activeCaseBody"></div>
                 </div>
-                <div class="case-body" id="activeCaseBody"></div>
             </div>
+        </div>
+
+        <!-- MAIN two columns - BILLS TAB (hidden by default) -->
+        <div id="billsSection" style="display: none;">
+            <div class="split-panel">
+                <!-- LEFT: bill registry + create new + vote log -->
+                <div class="case-list-panel">
+                    <div class="list-header">📜 SUPREME BILLS REGISTRY</div>
+                    <ul class="case-registry" id="billRegistryList"></ul>
+                    
+                    <!-- PUBLIC BILL VOTE LOG -->
+                    <div class="vote-log-panel">
+                        <div class="log-header">
+                            <span>📢 PUBLIC BILL VOTE LOG</span>
+                            <span id="billLogStatus">🔴 PRIVATE</span>
+                        </div>
+                        <div class="log-entries" id="billLogEntries">
+                            <div class="log-entry">⏳ Waiting for votes...</div>
+                        </div>
+                    </div>
+
+                    <div class="new-case-form">
+                        <h3>➕ PROPOSE NEW BILL</h3>
+                        <div class="form-row">
+                            <label>Bill Title</label>
+                            <input type="text" id="newBillTitle" placeholder="e.g. Revolutionary Tax Reform">
+                        </div>
+                        <div class="form-row">
+                            <label>Bill Description</label>
+                            <textarea id="newBillDesc" rows="2" placeholder="Details of the proposed bill..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <label>Proposed by</label>
+                            <input type="text" id="newBillProposer" placeholder="Your name">
+                        </div>
+                        <button class="create-btn" id="createBillBtn">☭ SUBMIT BILL TO PARLIAMENT</button>
+                        
+                        <!-- Admin delete button for bills -->
+                        <div id="adminBillDeleteContainer" style="display: none; margin-top: 15px;">
+                            <button class="delete-all-btn" id="deleteAllBillsBtn">☭ DELETE ALL BILL HISTORIES (ADMIN ONLY)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: active bill voting panel -->
+                <div class="active-case-panel" id="activeBillPanel">
+                    <div class="case-panel-header">
+                        <span>ACTIVE BILL № <span id="activeBillId">001</span></span>
+                        <span>☭ PARLIAMENT VOTE</span>
+                    </div>
+                    <div class="case-body" id="activeBillBody"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin delete container for cases -->
+        <div id="adminDeleteContainer" style="display: none; margin-top: 10px;">
+            <button class="delete-all-btn" id="deleteAllCasesBtn">☭ DELETE ALL CASE HISTORIES (ADMIN ONLY)</button>
         </div>
 
         <!-- judicial index log -->
@@ -722,17 +883,26 @@
         };
 
         let currentUser = null;
-        const VOTE_RECORDS_KEY = 'tribunal_vote_records';
+        let currentTab = 'cases'; // 'cases' or 'bills'
         
-        // Public vote log (stored in Firebase)
+        const VOTE_RECORDS_KEY = 'tribunal_vote_records';
+        const BILL_VOTE_RECORDS_KEY = 'bill_vote_records';
+        
+        // Public vote logs
         const voteLogRef = database.ref('voteLog');
+        const billVoteLogRef = database.ref('billVoteLog');
         const publicLogEnabledRef = database.ref('publicLogEnabled');
+        
+        // Timer settings
+        const MIN_TIMER_HOURS = 24; // Minimum 24 hours
+        const DEFAULT_TIMER_HOURS = 24;
         
         // Local state
         let publicLogEnabled = false;
         let voteLog = [];
+        let billVoteLog = [];
 
-        // Load vote records from localStorage
+        // Load vote records
         function loadVoteRecords() {
             const stored = localStorage.getItem(VOTE_RECORDS_KEY);
             return stored ? JSON.parse(stored) : {};
@@ -741,6 +911,15 @@
         function saveVoteRecords(records) {
             localStorage.setItem(VOTE_RECORDS_KEY, JSON.stringify(records));
         }
+        
+        function loadBillVoteRecords() {
+            const stored = localStorage.getItem(BILL_VOTE_RECORDS_KEY);
+            return stored ? JSON.parse(stored) : {};
+        }
+        
+        function saveBillVoteRecords(records) {
+            localStorage.setItem(BILL_VOTE_RECORDS_KEY, JSON.stringify(records));
+        }
 
         // Listen to public log enabled status
         publicLogEnabledRef.on('value', (snapshot) => {
@@ -748,7 +927,7 @@
             updateLogStatus();
         });
 
-        // Listen to vote log
+        // Listen to vote logs
         voteLogRef.on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
@@ -758,12 +937,27 @@
             }
             displayVoteLog();
         });
+        
+        billVoteLogRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                billVoteLog = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+            } else {
+                billVoteLog = [];
+            }
+            displayBillVoteLog();
+        });
 
         function updateLogStatus() {
             const logStatus = document.getElementById('logStatus');
+            const billLogStatus = document.getElementById('billLogStatus');
             if (logStatus) {
                 logStatus.innerHTML = publicLogEnabled ? '🟢 PUBLIC' : '🔴 PRIVATE';
                 logStatus.style.color = publicLogEnabled ? '#aaffaa' : '#ff8a8a';
+            }
+            if (billLogStatus) {
+                billLogStatus.innerHTML = publicLogEnabled ? '🟢 PUBLIC' : '🔴 PRIVATE';
+                billLogStatus.style.color = publicLogEnabled ? '#aaffaa' : '#ff8a8a';
             }
         }
 
@@ -785,48 +979,92 @@
                 logEntries.appendChild(div);
             });
         }
+        
+        function displayBillVoteLog() {
+            const logEntries = document.getElementById('billLogEntries');
+            if (!logEntries) return;
+            
+            if (billVoteLog.length === 0) {
+                logEntries.innerHTML = '<div class="log-entry">⏳ No bill votes recorded yet...</div>';
+                return;
+            }
+            
+            logEntries.innerHTML = '';
+            billVoteLog.slice(0, 20).forEach(entry => {
+                const div = document.createElement('div');
+                div.className = 'log-entry';
+                const voteClass = entry.vote === 'yes' ? 'vote-yes-text' : 'vote-no-text';
+                div.innerHTML = `☭ ${entry.username} voted <span class="${voteClass}">${entry.vote === 'yes' ? 'FOR' : 'AGAINST'}</span> on Bill #${entry.billId} (${entry.billTitle}) · ${new Date(entry.timestamp).toLocaleTimeString()}`;
+                logEntries.appendChild(div);
+            });
+        }
 
-        function showVoteNotification(username, caseId, defendant, vote) {
+        function showVoteNotification(username, caseId, defendant, vote, isBill = false) {
             if (!publicLogEnabled) return;
             
             const container = document.getElementById('notificationContainer');
             const notification = document.createElement('div');
             notification.className = 'vote-notification';
-            notification.innerHTML = `
-                <div style="font-size:2rem; margin-bottom:10px;">☭</div>
-                <div>${username}</div>
-                <div style="font-size:1.5rem; margin:10px 0;">VOTED ${vote === 'yes' ? 'GUILTY' : 'NOT GUILTY'}</div>
-                <div>on Case #${caseId} · ${defendant}</div>
-                <div style="margin-top:10px; font-size:0.9rem;">${new Date().toLocaleTimeString()}</div>
-            `;
+            
+            if (isBill) {
+                notification.innerHTML = `
+                    <div style="font-size:2rem; margin-bottom:10px;">📜</div>
+                    <div>${username}</div>
+                    <div style="font-size:1.5rem; margin:10px 0;">VOTED ${vote === 'yes' ? 'FOR' : 'AGAINST'} BILL</div>
+                    <div>Bill #${caseId} · ${defendant}</div>
+                    <div style="margin-top:10px; font-size:0.9rem;">${new Date().toLocaleTimeString()}</div>
+                `;
+            } else {
+                notification.innerHTML = `
+                    <div style="font-size:2rem; margin-bottom:10px;">☭</div>
+                    <div>${username}</div>
+                    <div style="font-size:1.5rem; margin:10px 0;">VOTED ${vote === 'yes' ? 'GUILTY' : 'NOT GUILTY'}</div>
+                    <div>on Case #${caseId} · ${defendant}</div>
+                    <div style="margin-top:10px; font-size:0.9rem;">${new Date().toLocaleTimeString()}</div>
+                `;
+            }
             
             container.appendChild(notification);
             
-            // Remove after 5 seconds
             setTimeout(() => {
                 notification.remove();
             }, 5000);
         }
 
-        function addVoteToLog(username, caseId, caseDefendant, vote) {
+        function addVoteToLog(username, caseId, caseDefendant, vote, isBill = false) {
             if (!publicLogEnabled) return;
             
-            const logEntry = {
-                username: username,
-                caseId: caseId,
-                caseDefendant: caseDefendant,
-                vote: vote,
-                timestamp: Date.now()
-            };
-            
-            voteLogRef.push(logEntry);
-            showVoteNotification(username, caseId, caseDefendant, vote);
+            if (isBill) {
+                const logEntry = {
+                    username: username,
+                    billId: caseId,
+                    billTitle: caseDefendant,
+                    vote: vote,
+                    timestamp: Date.now()
+                };
+                billVoteLogRef.push(logEntry);
+                showVoteNotification(username, caseId, caseDefendant, vote, true);
+            } else {
+                const logEntry = {
+                    username: username,
+                    caseId: caseId,
+                    caseDefendant: caseDefendant,
+                    vote: vote,
+                    timestamp: Date.now()
+                };
+                voteLogRef.push(logEntry);
+                showVoteNotification(username, caseId, caseDefendant, vote);
+            }
         }
 
-        // --- Firebase references for cases
+        // --- Firebase references
         const casesRef = database.ref('cases');
+        const billsRef = database.ref('bills');
+        
         let courtCases = [];
+        let courtBills = [];
 
+        // Listen to cases
         casesRef.on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
@@ -838,16 +1076,32 @@
                 courtCases = [];
             }
             ensureOneActive(courtCases);
-            renderEverything();
+            if (currentTab === 'cases') renderEverything();
             updateFirebaseCases(courtCases);
         });
-
-        function ensureOneActive(cases) {
-            const hasActive = cases.some(c => c.active === true);
-            if (!hasActive && cases.length > 0) {
-                cases[0].active = true;
+        
+        // Listen to bills
+        billsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                courtBills = Object.keys(data).map(key => ({
+                    ...data[key],
+                    firebaseKey: key
+                }));
+            } else {
+                courtBills = [];
             }
-            return cases;
+            ensureOneActive(courtBills);
+            if (currentTab === 'bills') renderBills();
+            updateFirebaseBills(courtBills);
+        });
+
+        function ensureOneActive(items) {
+            const hasActive = items.some(c => c.active === true);
+            if (!hasActive && items.length > 0) {
+                items[0].active = true;
+            }
+            return items;
         }
 
         function updateFirebaseCases(casesArray) {
@@ -858,9 +1112,58 @@
             });
             casesRef.set(casesObj);
         }
+        
+        function updateFirebaseBills(billsArray) {
+            const billsObj = {};
+            billsArray.forEach(b => {
+                const { firebaseKey, ...billData } = b;
+                billsObj[b.firebaseKey || b.id] = billData;
+            });
+            billsRef.set(billsObj);
+        }
 
         function getActiveCase() {
             return courtCases.find(c => c.active === true) || courtCases[0];
+        }
+        
+        function getActiveBill() {
+            return courtBills.find(b => b.active === true) || courtBills[0];
+        }
+
+        // Check if timer has expired
+        function isTimerExpired(item) {
+            if (!item.timerEnd) return false;
+            return Date.now() > item.timerEnd;
+        }
+        
+        // Get timer display
+        function getTimerDisplay(item) {
+            if (!item.timerEnd) return 'No timer set';
+            
+            const now = Date.now();
+            if (now > item.timerEnd) return 'EXPIRED';
+            
+            const hoursLeft = Math.floor((item.timerEnd - now) / (1000 * 60 * 60));
+            const minutesLeft = Math.floor(((item.timerEnd - now) % (1000 * 60 * 60)) / (1000 * 60));
+            
+            return `${hoursLeft}h ${minutesLeft}m remaining`;
+        }
+        
+        // Check if voting should be disabled
+        function isVotingDisabled(item) {
+            if (!item.timerEnd) return false;
+            return Date.now() > item.timerEnd;
+        }
+        
+        // Calculate result based on votes
+        function getVoteResult(item) {
+            if (!item.timerEnd) return null;
+            if (Date.now() <= item.timerEnd) return null;
+            
+            const total = (item.votesYes || 0) + (item.votesNo || 0);
+            if (total === 0) return 'NO VOTES';
+            
+            return (item.votesYes || 0) > (item.votesNo || 0) ? 'PASSED' : 'FAILED';
         }
 
         // --- login/logout
@@ -869,7 +1172,33 @@
         const loginBtn = document.getElementById('loginBtn');
         const loggedInDisplay = document.getElementById('loggedInDisplay');
         const adminDeleteContainer = document.getElementById('adminDeleteContainer');
+        const adminBillDeleteContainer = document.getElementById('adminBillDeleteContainer');
         const speakerControls = document.getElementById('speakerControls');
+        
+        // Tab elements
+        const tabCases = document.getElementById('tabCases');
+        const tabBills = document.getElementById('tabBills');
+        const casesSection = document.getElementById('casesSection');
+        const billsSection = document.getElementById('billsSection');
+
+        // Tab switching
+        tabCases.addEventListener('click', () => {
+            tabCases.classList.add('active');
+            tabBills.classList.remove('active');
+            casesSection.style.display = 'flex';
+            billsSection.style.display = 'none';
+            currentTab = 'cases';
+            renderEverything();
+        });
+        
+        tabBills.addEventListener('click', () => {
+            tabBills.classList.add('active');
+            tabCases.classList.remove('active');
+            casesSection.style.display = 'none';
+            billsSection.style.display = 'flex';
+            currentTab = 'bills';
+            renderBills();
+        });
 
         function updateLoginUI() {
             if (currentUser) {
@@ -880,15 +1209,23 @@
                 document.getElementById('logoutBtn')?.addEventListener('click', () => {
                     currentUser = null;
                     updateLoginUI();
-                    renderEverything();
+                    if (currentTab === 'cases') renderEverything();
+                    else renderBills();
                 });
                 
-                // Show admin delete button for Speaker
+                // Show admin delete buttons for Speaker
                 if (currentUser === 'Speaker of Supreme Court') {
                     adminDeleteContainer.style.display = 'block';
+                    adminBillDeleteContainer.style.display = 'block';
                     
-                    // Add speaker controls
+                    // Add speaker controls with timer
                     speakerControls.innerHTML = `
+                        <div class="timer-control">
+                            <span>⏱️ Timer (min 24h):</span>
+                            <input type="number" id="timerHours" class="timer-input" value="24" min="24" step="1">
+                            <span>hours</span>
+                            <button class="timer-set-btn" id="setTimerBtn">SET FOR ACTIVE</button>
+                        </div>
                         <button class="public-toggle ${publicLogEnabled ? 'active' : ''}" id="togglePublicLog">
                             ${publicLogEnabled ? '🔊 PUBLIC LOG ON' : '🔇 PUBLIC LOG OFF'}
                         </button>
@@ -903,25 +1240,52 @@
                     document.getElementById('wipeVoteLogs')?.addEventListener('click', () => {
                         if (confirm('☭ WIPE ALL PUBLIC VOTE LOGS? This cannot be undone.')) {
                             voteLogRef.remove();
+                            billVoteLogRef.remove();
+                        }
+                    });
+                    
+                    document.getElementById('setTimerBtn')?.addEventListener('click', () => {
+                        const hours = parseInt(document.getElementById('timerHours').value);
+                        if (hours < MIN_TIMER_HOURS) {
+                            alert(`Timer must be at least ${MIN_TIMER_HOURS} hours!`);
+                            return;
+                        }
+                        
+                        if (currentTab === 'cases') {
+                            const active = getActiveCase();
+                            if (active) {
+                                active.timerEnd = Date.now() + (hours * 60 * 60 * 1000);
+                                updateFirebaseCases(courtCases);
+                                renderEverything();
+                            }
+                        } else {
+                            const active = getActiveBill();
+                            if (active) {
+                                active.timerEnd = Date.now() + (hours * 60 * 60 * 1000);
+                                updateFirebaseBills(courtBills);
+                                renderBills();
+                            }
                         }
                     });
                 } else {
                     adminDeleteContainer.style.display = 'none';
+                    adminBillDeleteContainer.style.display = 'none';
                     speakerControls.innerHTML = '';
                 }
             } else {
                 loggedInDisplay.innerHTML = `<span style="color:#ff8a8a;">⛔ no account logged in</span>`;
                 adminDeleteContainer.style.display = 'none';
+                adminBillDeleteContainer.style.display = 'none';
                 speakerControls.innerHTML = '';
             }
-            renderEverything();
+            if (currentTab === 'cases') renderEverything();
+            else renderBills();
         }
 
         loginBtn.addEventListener('click', () => {
             const selectedUser = accountSelect.value;
             const pwd = passwordInput.value.trim();
             
-            // Check password
             if (ACCOUNT_PASSWORDS[selectedUser] && ACCOUNT_PASSWORDS[selectedUser] === pwd) {
                 currentUser = selectedUser;
                 passwordInput.value = '';
@@ -931,7 +1295,7 @@
             }
         });
 
-        // --- render everything
+        // --- render cases
         function renderEverything() {
             const active = getActiveCase();
             const voteRecords = loadVoteRecords();
@@ -971,23 +1335,27 @@
                     userVote = voteRecords[key] || null;
                 }
 
-                const disableYes = !currentUser || userVote !== null;
-                const disableNo = !currentUser || userVote !== null;
-                
-                // Only Speaker can reset votes
+                const timerExpired = isTimerExpired(active);
+                const votingDisabled = timerExpired || !currentUser || userVote !== null;
                 const canResetVotes = currentUser === 'Speaker of Supreme Court';
+                const result = getVoteResult(active);
 
                 activeBody.innerHTML = `
                     <div class="defendant-name">⚡ ${active.defendant}</div>
                     <ul class="crime-list">${crimesHtml}</ul>
                     <div class="sentence-box">☭ SENTENCE: ${active.sentence}</div>
+                    <div class="timer-box ${timerExpired ? 'timer-expired' : 'timer-active'}">
+                        ⏱️ VOTING TIME: ${getTimerDisplay(active)}
+                        ${timerExpired ? '<br>⛔ VOTING CLOSED' : ''}
+                    </div>
+                    ${result ? `<div class="result-box ${result === 'PASSED' ? 'result-pass' : 'result-fail'}">📢 FINAL VERDICT: ${result}</div>` : ''}
                     <div class="voting-hammer">
-                        <button class="vote-btn vote-yes" id="voteYesBtn" ${disableYes ? 'disabled' : ''}>✔ GUILTY</button>
-                        <button class="vote-btn vote-no" id="voteNoBtn" ${disableNo ? 'disabled' : ''}>✖ NOT GUILTY</button>
+                        <button class="vote-btn vote-yes" id="voteYesBtn" ${votingDisabled ? 'disabled' : ''}>✔ GUILTY</button>
+                        <button class="vote-btn vote-no" id="voteNoBtn" ${votingDisabled ? 'disabled' : ''}>✖ NOT GUILTY</button>
                     </div>
                     <div class="tally-board">
-                        <span class="tally-yes">☭ GUILTY: ${active.votesYes}</span>
-                        <span class="tally-no">✖ NOT GUILTY: ${active.votesNo}</span>
+                        <span class="tally-yes">☭ GUILTY: ${active.votesYes || 0}</span>
+                        <span class="tally-no">✖ NOT GUILTY: ${active.votesNo || 0}</span>
                     </div>
                     <button class="vote-btn vote-reset" id="resetVotesBtn" style="width:100%; margin-top:5px;" ${!canResetVotes ? 'disabled' : ''}>⟲ RESET VOTE (SPEAKER ONLY)</button>
                     ${userVote ? `<div style="background:#4d0f0f; padding:10px; margin-top:10px; border:2px solid #ffb3b3; text-align:center;">✔ You voted: <strong>${userVote === 'yes' ? 'GUILTY' : 'NOT GUILTY'}</strong> on this case.</div>` : ''}
@@ -995,6 +1363,8 @@
 
                 document.getElementById('voteYesBtn')?.addEventListener('click', () => {
                     if (!currentUser) { alert('Login first.'); return; }
+                    if (timerExpired) { alert('Voting has ended!'); return; }
+                    
                     const key = `${currentUser}_${active.id}`;
                     const records = loadVoteRecords();
                     if (records[key]) {
@@ -1007,14 +1377,14 @@
                     records[key] = 'yes';
                     saveVoteRecords(records);
                     
-                    // Add to public log if enabled
                     addVoteToLog(currentUser, active.id, active.defendant, 'yes');
-                    
                     updateFirebaseCases(courtCases);
                 });
 
                 document.getElementById('voteNoBtn')?.addEventListener('click', () => {
                     if (!currentUser) { alert('Login first.'); return; }
+                    if (timerExpired) { alert('Voting has ended!'); return; }
+                    
                     const key = `${currentUser}_${active.id}`;
                     const records = loadVoteRecords();
                     if (records[key]) {
@@ -1027,21 +1397,19 @@
                     records[key] = 'no';
                     saveVoteRecords(records);
                     
-                    // Add to public log if enabled
                     addVoteToLog(currentUser, active.id, active.defendant, 'no');
-                    
                     updateFirebaseCases(courtCases);
                 });
 
                 document.getElementById('resetVotesBtn')?.addEventListener('click', () => {
-                    // Double-check speaker permission
                     if (currentUser !== 'Speaker of Supreme Court') {
                         alert('Only the Speaker can reset votes!');
                         return;
                     }
-                    if (confirm('Wipe all votes for this case? (Clears per-user records)')) {
+                    if (confirm('Wipe all votes for this case?')) {
                         active.votesYes = 0;
                         active.votesNo = 0;
+                        active.timerEnd = null;
                         const records = loadVoteRecords();
                         const newRecords = {};
                         for (let k in records) {
@@ -1057,23 +1425,141 @@
                 activeBody.innerHTML = `<div style="padding:40px; text-align:center;">⚠ NO ACTIVE CASE — CREATE ONE</div>`;
             }
 
-            // judicial index
-            const indexDiv = document.getElementById('judicialIndex');
-            const actionMap = [
-                { label: 'CHARGES FILED', date: new Date().toLocaleDateString() },
-                { label: 'TRIBUNAL', date: new Date().toLocaleDateString() },
-                { label: 'VERDICT', date: 'pending' },
-                { label: 'SENTENCE', date: 'pending' }
-            ];
-            indexDiv.innerHTML = '';
-            actionMap.forEach((act, idx) => {
-                const spanWrap = document.createElement('div');
-                spanWrap.innerHTML = `<span>${idx+1}</span> ${act.label} <span style="color:#ffa4a4;">${act.date}</span>`;
-                indexDiv.appendChild(spanWrap);
-            });
-            
             updateLogStatus();
             displayVoteLog();
+        }
+        
+        // --- render bills
+        function renderBills() {
+            const active = getActiveBill();
+            const voteRecords = loadBillVoteRecords();
+
+            // Render registry list
+            const registryEl = document.getElementById('billRegistryList');
+            registryEl.innerHTML = '';
+            courtBills.forEach(b => {
+                const li = document.createElement('li');
+                li.className = b.active ? 'active-case' : '';
+                li.setAttribute('data-bill-id', b.id);
+                li.innerHTML = `<span class="case-id">№ ${b.id}</span> <span class="case-defendant">${b.title}</span>`;
+                li.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    courtBills.forEach(bb => bb.active = false);
+                    const targetBill = courtBills.find(bb => bb.id === b.id);
+                    if (targetBill) targetBill.active = true;
+                    updateFirebaseBills(courtBills);
+                });
+                registryEl.appendChild(li);
+            });
+
+            // active bill panel
+            const activeIdSpan = document.getElementById('activeBillId');
+            const activeBody = document.getElementById('activeBillBody');
+            if (active) {
+                activeIdSpan.innerText = active.id;
+
+                let userVote = null;
+                if (currentUser) {
+                    const key = `${currentUser}_${active.id}`;
+                    userVote = voteRecords[key] || null;
+                }
+
+                const timerExpired = isTimerExpired(active);
+                const votingDisabled = timerExpired || !currentUser || userVote !== null;
+                const canResetVotes = currentUser === 'Speaker of Supreme Court';
+                const result = getVoteResult(active);
+
+                activeBody.innerHTML = `
+                    <div class="defendant-name">📜 ${active.title}</div>
+                    <div style="background:#2d0c0c; padding:20px; margin:20px 0; border-left:10px solid #a10022; font-size:1.3rem;">
+                        ${active.description}
+                    </div>
+                    <div style="background:#1e0101; padding:15px; margin:20px 0; border:2px dashed #b3003c; font-size:1.3rem;">
+                        ☭ PROPOSED BY: ${active.proposer}
+                    </div>
+                    <div class="timer-box ${timerExpired ? 'timer-expired' : 'timer-active'}">
+                        ⏱️ VOTING TIME: ${getTimerDisplay(active)}
+                        ${timerExpired ? '<br>⛔ VOTING CLOSED' : ''}
+                    </div>
+                    ${result ? `<div class="result-box ${result === 'PASSED' ? 'result-pass' : 'result-fail'}">📢 FINAL RESULT: BILL ${result}</div>` : ''}
+                    <div class="voting-hammer">
+                        <button class="vote-btn vote-yes" id="billVoteYesBtn" ${votingDisabled ? 'disabled' : ''}>✔ FOR</button>
+                        <button class="vote-btn vote-no" id="billVoteNoBtn" ${votingDisabled ? 'disabled' : ''}>✖ AGAINST</button>
+                    </div>
+                    <div class="tally-board">
+                        <span class="tally-yes">☭ FOR: ${active.votesYes || 0}</span>
+                        <span class="tally-no">✖ AGAINST: ${active.votesNo || 0}</span>
+                    </div>
+                    <button class="vote-btn vote-reset" id="resetBillVotesBtn" style="width:100%; margin-top:5px;" ${!canResetVotes ? 'disabled' : ''}>⟲ RESET VOTES (SPEAKER ONLY)</button>
+                    ${userVote ? `<div style="background:#4d0f0f; padding:10px; margin-top:10px; border:2px solid #ffb3b3; text-align:center;">✔ You voted: <strong>${userVote === 'yes' ? 'FOR' : 'AGAINST'}</strong> this bill.</div>` : ''}
+                `;
+
+                document.getElementById('billVoteYesBtn')?.addEventListener('click', () => {
+                    if (!currentUser) { alert('Login first.'); return; }
+                    if (timerExpired) { alert('Voting has ended!'); return; }
+                    
+                    const key = `${currentUser}_${active.id}`;
+                    const records = loadBillVoteRecords();
+                    if (records[key]) {
+                        alert('You have already voted on this bill!');
+                        renderBills();
+                        return;
+                    }
+                    
+                    active.votesYes = (active.votesYes || 0) + 1;
+                    records[key] = 'yes';
+                    saveBillVoteRecords(records);
+                    
+                    addVoteToLog(currentUser, active.id, active.title, 'yes', true);
+                    updateFirebaseBills(courtBills);
+                });
+
+                document.getElementById('billVoteNoBtn')?.addEventListener('click', () => {
+                    if (!currentUser) { alert('Login first.'); return; }
+                    if (timerExpired) { alert('Voting has ended!'); return; }
+                    
+                    const key = `${currentUser}_${active.id}`;
+                    const records = loadBillVoteRecords();
+                    if (records[key]) {
+                        alert('You have already voted on this bill!');
+                        renderBills();
+                        return;
+                    }
+                    
+                    active.votesNo = (active.votesNo || 0) + 1;
+                    records[key] = 'no';
+                    saveBillVoteRecords(records);
+                    
+                    addVoteToLog(currentUser, active.id, active.title, 'no', true);
+                    updateFirebaseBills(courtBills);
+                });
+
+                document.getElementById('resetBillVotesBtn')?.addEventListener('click', () => {
+                    if (currentUser !== 'Speaker of Supreme Court') {
+                        alert('Only the Speaker can reset votes!');
+                        return;
+                    }
+                    if (confirm('Wipe all votes for this bill?')) {
+                        active.votesYes = 0;
+                        active.votesNo = 0;
+                        active.timerEnd = null;
+                        const records = loadBillVoteRecords();
+                        const newRecords = {};
+                        for (let k in records) {
+                            if (!k.endsWith(`_${active.id}`)) {
+                                newRecords[k] = records[k];
+                            }
+                        }
+                        saveBillVoteRecords(newRecords);
+                        updateFirebaseBills(courtBills);
+                    }
+                });
+            } else {
+                activeBody.innerHTML = `<div style="padding:40px; text-align:center;">⚠ NO ACTIVE BILL — CREATE ONE</div>`;
+            }
+
+            updateLogStatus();
+            displayBillVoteLog();
         }
 
         // --- create new case
@@ -1114,14 +1600,52 @@
             courtCases.push(newCase);
             updateFirebaseCases(courtCases);
             
-            // Clear fields
             document.getElementById('newDefendant').value = '';
             document.getElementById('newCrime1').value = '';
             document.getElementById('newCrime2').value = '';
             document.getElementById('newSentence').value = '';
         });
+        
+        // --- create new bill
+        document.getElementById('createBillBtn').addEventListener('click', () => {
+            if (!currentUser) {
+                alert('You must be logged in to propose a bill.');
+                return;
+            }
+            
+            const title = document.getElementById('newBillTitle').value.trim();
+            const desc = document.getElementById('newBillDesc').value.trim();
+            const proposer = document.getElementById('newBillProposer').value.trim() || currentUser;
 
-        // --- DELETE ALL CASES (admin only)
+            if (!title || !desc) {
+                alert('Bill title and description required');
+                return;
+            }
+
+            const maxId = Math.max(...courtBills.map(b => parseInt(b.id) || 0), 0);
+            const newId = String(maxId + 1).padStart(3, '0');
+
+            courtBills.forEach(b => b.active = false);
+
+            const newBill = {
+                id: newId,
+                title: title,
+                description: desc,
+                proposer: proposer,
+                votesYes: 0,
+                votesNo: 0,
+                active: true
+            };
+            
+            courtBills.push(newBill);
+            updateFirebaseBills(courtBills);
+            
+            document.getElementById('newBillTitle').value = '';
+            document.getElementById('newBillDesc').value = '';
+            document.getElementById('newBillProposer').value = '';
+        });
+
+        // --- DELETE ALL CASES
         document.getElementById('deleteAllCasesBtn')?.addEventListener('click', () => {
             if (!currentUser || currentUser !== 'Speaker of Supreme Court') {
                 alert('Only the Speaker can delete all cases.');
@@ -1134,9 +1658,29 @@
                 renderEverything();
             }
         });
+        
+        // --- DELETE ALL BILLS
+        document.getElementById('deleteAllBillsBtn')?.addEventListener('click', () => {
+            if (!currentUser || currentUser !== 'Speaker of Supreme Court') {
+                alert('Only the Speaker can delete all bills.');
+                return;
+            }
+            if (confirm('☭ DESTROY ALL BILL HISTORIES? This cannot be undone.')) {
+                billsRef.remove();
+                courtBills = [];
+                localStorage.removeItem(BILL_VOTE_RECORDS_KEY);
+                renderBills();
+            }
+        });
 
         // Initial render
         updateLoginUI();
+        
+        // Timer update every minute
+        setInterval(() => {
+            if (currentTab === 'cases') renderEverything();
+            else renderBills();
+        }, 60000);
     </script>
 </body>
 </html>
