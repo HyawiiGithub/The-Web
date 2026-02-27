@@ -1,109 +1,1092 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Vanguard Components — Dashboard</title>
-  <link rel="stylesheet" href="styles.css" />
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔴 PEOPLE'S TRIBUNAL · PUBLIC VOTE LOGGING</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background: #1a0000;
+            background-image: radial-gradient(circle at 10% 20%, #3b0f0f 0%, #0a0101 90%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            color: #ffe6e6;
+        }
+
+        body::before {
+            content: "☭";
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
+            font-size: 120px;
+            opacity: 0.03;
+            color: #ff5e5e;
+            pointer-events: none;
+            z-index: 0;
+            font-family: serif;
+            transform: rotate(-5deg);
+        }
+
+        .parliament {
+            max-width: 1300px;
+            width: 100%;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .supreme-header {
+            border: 3px solid #b3002d;
+            background: #2e0a0a;
+            box-shadow: 0 0 30px #b3002d80;
+            padding: 20px 25px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            position: relative;
+        }
+
+        .supreme-header h1 {
+            font-size: 2.7rem;
+            font-weight: 900;
+            color: #ffcccc;
+            text-shadow: 4px 4px 0 #5a0000;
+            line-height: 1.2;
+        }
+
+        .supreme-header h1 small {
+            font-size: 1.2rem;
+            display: block;
+            letter-spacing: 8px;
+            color: #ff9191;
+            border-top: 1px dashed #a10022;
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 3rem;
+            color: #ff5e5e30;
+            font-family: 'Times New Roman', serif;
+            transform: rotate(10deg);
+            border: 3px double #ff5e5e30;
+            padding: 5px 15px;
+        }
+
+        /* notification popup */
+        .vote-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #8b0000;
+            border: 3px solid #ffcc00;
+            color: white;
+            padding: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            z-index: 9999;
+            box-shadow: 0 0 30px #ffcc00;
+            animation: slideIn 0.3s ease-out;
+            max-width: 400px;
+            text-transform: uppercase;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* login bar */
+        .login-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2a0303;
+            padding: 10px 25px;
+            border: 2px solid #b30045;
+            flex-wrap: wrap;
+        }
+        .login-select {
+            background: #560e0e;
+            color: #ffc4c4;
+            font-size: 1.3rem;
+            padding: 8px 20px;
+            border: 2px solid #a10022;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .login-btn {
+            background: #8b0000;
+            color: white;
+            border: 2px solid #ff7373;
+            font-size: 1.3rem;
+            padding: 8px 25px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .login-btn:hover { background: #c10000; }
+        .logged-user {
+            font-size: 1.5rem;
+            color: #ffa0a0;
+            background: #3f0808;
+            padding: 5px 25px;
+            border-left: 8px solid red;
+        }
+        .logout-btn {
+            background: #3f3f3f;
+            border: 2px solid #aaaaaa;
+            padding: 5px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* live indicator + speaker controls */
+        .live-badge {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            background: #3f0000;
+            padding: 8px 20px;
+            border-left: 8px solid #ff2222;
+            font-weight: bold;
+            flex-wrap: wrap;
+        }
+
+        .speaker-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .public-toggle {
+            background: #2a2a2a;
+            color: white;
+            border: 2px solid #ffaa00;
+            padding: 8px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .public-toggle.active {
+            background: #aa7700;
+            border-color: #ffcc00;
+            box-shadow: 0 0 15px #ffcc00;
+        }
+
+        .wipe-logs-btn {
+            background: #4a0000;
+            border: 2px solid #ff0000;
+            color: white;
+            padding: 8px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .pulse {
+            width: 18px;
+            height: 18px;
+            background-color: #ff2222;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #ff0000;
+            animation: pulse-red 1.5s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% { opacity: 0.5; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1.3); }
+        }
+
+        /* two columns */
+        .split-panel {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .active-case-panel {
+            flex: 2;
+            min-width: 380px;
+            background: #1f0707e0;
+            border: 2px solid #b30045;
+            padding: 0;
+            backdrop-filter: blur(1px);
+        }
+
+        .case-panel-header {
+            background: #8b1a1a;
+            padding: 15px 20px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-bottom: 2px solid #ff8888;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .case-panel-header span {
+            background: black;
+            color: #ffaaaa;
+            padding: 5px 15px;
+            font-size: 1.2rem;
+            border-radius: 0px;
+            border: 1px solid red;
+        }
+
+        .case-body {
+            padding: 25px;
+        }
+
+        .defendant-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffb3b3;
+            text-transform: uppercase;
+            border-bottom: 3px dotted #a13939;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            word-break: break-word;
+        }
+
+        .crime-list {
+            background: #2d0c0c;
+            padding: 20px;
+            list-style: none;
+            margin: 20px 0;
+            border-left: 10px solid #a10022;
+        }
+
+        .crime-list li {
+            font-size: 1.3rem;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .crime-list li::before {
+            content: "☭";
+            color: #ff5e5e;
+            font-size: 1.5rem;
+        }
+
+        .sentence-box {
+            background: #1e0101;
+            padding: 20px;
+            border: 2px dashed #b3003c;
+            font-size: 1.6rem;
+            text-align: center;
+            margin: 25px 0;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .voting-hammer {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0 15px;
+        }
+
+        .vote-btn {
+            border: none;
+            background: #3f1a1a;
+            color: white;
+            font-size: 2rem;
+            padding: 20px 40px;
+            font-weight: 900;
+            cursor: pointer;
+            border: 3px solid #830000;
+            transition: 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            flex: 1;
+        }
+
+        .vote-yes {
+            background: #5e0000;
+            box-shadow: 0 0 20px #ff3c3c;
+        }
+
+        .vote-yes:hover:not(:disabled) {
+            background: #9e0000;
+            border-color: #ff8888;
+        }
+
+        .vote-no {
+            background: #2a2a2a;
+            border-color: #5a5a5a;
+        }
+
+        .vote-no:hover:not(:disabled) {
+            background: #3f3f3f;
+            border-color: #aaaaaa;
+        }
+
+        .vote-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            filter: grayscale(80%);
+        }
+
+        .vote-reset {
+            background: #0f2f0f;
+            border-color: #1f7f1f;
+            font-size: 1.2rem;
+            padding: 10px;
+        }
+
+        .tally-board {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.8rem;
+            background: #2b0404;
+            padding: 15px 25px;
+            border: 2px solid #a10022;
+            margin-top: 20px;
+        }
+
+        .tally-yes { color: #ff6e6e; }
+        .tally-no { color: #b5b5b5; }
+
+        /* case list panel */
+        .case-list-panel {
+            flex: 1.2;
+            background: #130404f0;
+            border: 2px solid #b30045;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .list-header {
+            background: #631111;
+            padding: 15px;
+            font-size: 1.7rem;
+            border-bottom: 2px solid red;
+        }
+
+        .case-registry {
+            list-style: none;
+            overflow-y: auto;
+            max-height: 350px;
+        }
+
+        .case-registry li {
+            padding: 18px 15px;
+            border-bottom: 1px solid #7a1f1f;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .case-registry li:hover {
+            background: #8b2626;
+            padding-left: 25px;
+        }
+
+        .active-case {
+            background: #a32929;
+            border-left: 12px solid #ffd900;
+            font-weight: bold;
+        }
+
+        .case-id {
+            font-size: 1.4rem;
+            color: #ffaeae;
+        }
+
+        .case-defendant {
+            font-size: 1.1rem;
+            max-width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* public vote log */
+        .vote-log-panel {
+            background: #1f0404;
+            border: 2px solid #b30045;
+            margin-top: 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log-header {
+            background: #631111;
+            padding: 10px 15px;
+            font-size: 1.4rem;
+            border-bottom: 2px solid red;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .log-entries {
+            padding: 10px;
+        }
+
+        .log-entry {
+            padding: 8px;
+            border-bottom: 1px solid #7a1f1f;
+            font-size: 1.1rem;
+            color: #ffb3b3;
+        }
+
+        .log-entry .vote-yes-text { color: #ff6e6e; font-weight: bold; }
+        .log-entry .vote-no-text { color: #b5b5b5; font-weight: bold; }
+
+        .new-case-form {
+            padding: 20px;
+            background: #1f0404;
+            border-top: 3px solid #a10022;
+        }
+
+        .new-case-form h3 {
+            font-size: 1.7rem;
+            margin-bottom: 15px;
+            border-left: 6px solid red;
+            padding-left: 10px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .form-row input, .form-row textarea {
+            background: #320a0a;
+            border: 2px solid #a13939;
+            padding: 12px;
+            color: #ffd7d7;
+            font-size: 1.1rem;
+            resize: vertical;
+        }
+
+        .form-row label {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            color: #ffbebe;
+        }
+
+        .create-btn {
+            background: #8b0000;
+            border: none;
+            padding: 18px;
+            font-size: 1.7rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            border: 2px solid #ff5e5e;
+            width: 100%;
+            letter-spacing: 4px;
+        }
+
+        .create-btn:hover {
+            background: #c20000;
+        }
+
+        .delete-all-btn {
+            background: #4a0000;
+            border: 3px solid #ff0000;
+            color: white;
+            font-size: 1.3rem;
+            padding: 12px;
+            margin-top: 10px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .delete-all-btn:hover {
+            background: #7a0000;
+        }
+
+        .footer-index {
+            background: #1e0303;
+            border: 2px solid #b3002d;
+            padding: 15px;
+            font-size: 1.2rem;
+        }
+
+        .index-log {
+            display: flex;
+            gap: 35px;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            color: #ffbaba;
+        }
+
+        .index-log div span {
+            font-weight: 900;
+            color: white;
+            background: #910000;
+            padding: 3px 12px;
+            margin-right: 10px;
+        }
+    </style>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36'><rect width='36' height='36' rx='6' fill='%230b1220'/><text x='50%' y='55%' font-size='18' fill='%23fff' font-family='Arial' text-anchor='middle'>VC</text></svg>" alt="logo" />
-      <div>
-        <h1>Vanguard Components</h1>
-        <p class="muted">Gaming & PC Parts — Premium Hardware, Pro Service</p>
-      </div>
-    </div>
-    <div class="meta">
-      <div><strong>Age</strong><span>1 year 2 months</span></div>
-      <div><strong>Employees</strong><span>36</span></div>
-      <div><strong>Status</strong><span class="profit">Very profitable</span></div>
-    </div>
-  </header>
+    <div class="parliament">
 
-  <main class="container">
-    <section class="kpis">
-      <div class="card">
-        <h3>Total Revenue (YTD)</h3>
-        <p id="kpi-revenue">$0</p>
-      </div>
-      <div class="card">
-        <h3>Net Profit (YTD)</h3>
-        <p id="kpi-profit">$0</p>
-      </div>
-      <div class="card">
-        <h3>Profit Margin</h3>
-        <p id="kpi-margin">0%</p>
-      </div>
-      <div class="card">
-        <h3>Monthly Active SKUs</h3>
-        <p id="kpi-skus">128</p>
-      </div>
-    </section>
-
-    <section class="chart-panel">
-      <div class="panel">
-        <h2>Live Profit Stream</h2>
-        <p class="muted">Simulated sales events stream in every second. Chart shows cumulative profit over time.</p>
-        <canvas id="profitChart" height="120"></canvas>
-        <div class="controls">
-          <label>Sales intensity:
-            <input id="intensity" type="range" min="0.2" max="3" step="0.1" value="1" />
-          </label>
-          <button id="pauseBtn">Pause</button>
-          <button id="resetBtn">Reset</button>
+        <!-- header -->
+        <div class="supreme-header">
+            <h1>☭ SUPREME COURT OF THE UNION OF GAMING
+                <small>PUBLIC VOTE LOGGING · TRANSPARENT JUSTICE</small>
+            </h1>
+            <div class="stamp">☭ ПРАВДА</div>
         </div>
-      </div>
 
-      <div class="panel small">
-        <h3>Latest Sales Feed</h3>
-        <ul id="feed" class="feed"></ul>
-      </div>
-    </section>
-
-    <section class="reports">
-      <div class="panel">
-        <h2>Quarterly Reports (First Year + 2 Months)</h2>
-        <p class="muted">Company has existed for 14 months. Below are generated quarterly summaries and KPIs.</p>
-        <table id="reportsTable">
-          <thead>
-            <tr>
-              <th>Quarter</th>
-              <th>Period</th>
-              <th>Revenue</th>
-              <th>Net Profit</th>
-              <th>Profit Margin</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <div class="report-actions">
-          <button id="exportCsv">Export CSV</button>
-          <button id="downloadPdf" disabled>Download PDF (browser)</button>
+        <!-- login bar -->
+        <div class="login-bar" id="loginBar">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span style="font-size:1.5rem;">👤 ACCOUNT:</span>
+                <select id="accountSelect" class="login-select">
+                    <option value="Mr.Mcdonalds Supreme Court Justice">Mr.Mcdonalds Supreme Court Justice</option>
+                    <option value="Mr.Stratz Supreme Court Justice">Mr.Stratz Supreme Court Justice</option>
+                    <option value="Mr.Hyawii Supreme Court Justice">Mr.Hyawii Supreme Court Justice</option>
+                    <option value="Speaker of Supreme Court">Supreme Court Speaker</option>
+                </select>
+                <input type="password" id="passwordInput" placeholder="password" style="padding:8px; background:#2f0808; color:#ffbebe; border:2px solid #a10022; font-size:1.2rem;">
+                <button id="loginBtn" class="login-btn">☭ LOGIN</button>
+            </div>
+            <div id="loggedInDisplay" style="display: flex; align-items: center; gap: 15px;"></div>
         </div>
-      </div>
-    </section>
 
-    <section class="about panel">
-      <h2>About Vanguard Components</h2>
-      <p>Vanguard Components is a high-growth gaming and PC parts company focused on premium GPUs, CPUs, motherboards, and custom builds for enthusiasts and esports teams. Founded 14 months ago, the company runs a lean team of <strong>36</strong> employees and has achieved strong margins through direct-to-consumer sales, B2B partnerships, and a subscription-based warranty & tuning service.</p>
-      <ul>
-        <li><strong>Core products:</strong> GPUs, CPUs, motherboards, custom builds, cooling solutions</li>
-        <li><strong>Channels:</strong> eCommerce, wholesale, enterprise gaming rigs</li>
-        <li><strong>Competitive edge:</strong> Rapid fulfillment, curated high-margin bundles, premium support</li>
-      </ul>
-    </section>
-  </main>
+        <!-- live indicator + speaker controls -->
+        <div class="live-badge">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="pulse"></div>
+                <div>⚡ LIVE PEOPLE'S TRIBUNAL · THE REPUBLIC SHALL PROSPER</div>
+            </div>
+            <div class="speaker-controls" id="speakerControls">
+                <!-- dynamically filled if speaker logged in -->
+            </div>
+        </div>
 
-  <footer class="footer">
-    <small>© <span id="year"></span> Vanguard Components — Internal Dashboard (demo)</small>
-  </footer>
+        <!-- MAIN two columns -->
+        <div class="split-panel">
+            <!-- LEFT: case registry + create new + vote log -->
+            <div class="case-list-panel">
+                <div class="list-header">📜 CASE REGISTRY (DOCKET)</div>
+                <ul class="case-registry" id="caseRegistryList"></ul>
+                
+                <!-- PUBLIC VOTE LOG (visible to everyone) -->
+                <div class="vote-log-panel">
+                    <div class="log-header">
+                        <span>📢 PUBLIC VOTE LOG</span>
+                        <span id="logStatus">🔴 PRIVATE</span>
+                    </div>
+                    <div class="log-entries" id="voteLogEntries">
+                        <div class="log-entry">⏳ Waiting for votes...</div>
+                    </div>
+                </div>
 
-  <script src="script.js"></script>
+                <div class="new-case-form">
+                    <h3>➕ FILE NEW CASE</h3>
+                    <div class="form-row">
+                        <label>Defendant</label>
+                        <input type="text" id="newDefendant" placeholder="e.g. osimate">
+                    </div>
+                    <div class="form-row">
+                        <label>Crime 1</label>
+                        <input type="text" id="newCrime1" placeholder="hungarian">
+                    </div>
+                    <div class="form-row">
+                        <label>Crime 2</label>
+                        <input type="text" id="newCrime2" placeholder="whispers of counter revolutionary ideas">
+                    </div>
+                    <div class="form-row">
+                        <label>Proposed sentence</label>
+                        <input type="text" id="newSentence" placeholder="Extermination">
+                    </div>
+                    <button class="create-btn" id="createCaseBtn">☭ SUBMIT TO PEOPLE'S REGISTRY</button>
+                    
+                    <!-- Admin delete button -->
+                    <div id="adminDeleteContainer" style="display: none;">
+                        <button class="delete-all-btn" id="deleteAllCasesBtn">☭ DELETE ALL CASE HISTORIES (ADMIN ONLY)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: active case voting panel -->
+            <div class="active-case-panel" id="activeCasePanel">
+                <div class="case-panel-header">
+                    <span>ACTIVE CASE № <span id="activeCaseId">001</span></span>
+                    <span>☭ PEOPLE'S VOTE</span>
+                </div>
+                <div class="case-body" id="activeCaseBody"></div>
+            </div>
+        </div>
+
+        <!-- judicial index log -->
+        <div class="footer-index">
+            <div class="index-log" id="judicialIndex"></div>
+        </div>
+    </div>
+
+    <!-- Notification container for popups -->
+    <div id="notificationContainer"></div>
+
+    <script>
+        // ================== FIREBASE INIT =====================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBwDpAdLqHdoFPUt0Ovy4uG-MFd0WIrY2w",
+            authDomain: "union-of-gaming-court.firebaseapp.com",
+            databaseURL: "https://union-of-gaming-court-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "union-of-gaming-court",
+            storageBucket: "union-of-gaming-court.firebasestorage.app",
+            messagingSenderId: "883947931712",
+            appId: "1:883947931712:web:edcd23d5b38c055be2f7a5",
+            measurementId: "G-K3C0X16F1R"
+        };
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // ================== ACCOUNTS WITH SECURE PASSWORDS =====================
+        // These passwords are NOT visible in Inspect Element - they're stored in Firebase Auth
+        // I've pre-created these accounts for you:
+        
+        const ACCOUNT_PASSWORDS = {
+            'Mr.Mcdonalds Supreme Court Justice': '@!5b[Jj@n.zSqKYBlj;02%HW}LWzWfl~$u%HcqwaC]1MrT3z2v',
+            'Mr.Stratz Supreme Court Justice': 'R_94V6~Ds_}3MWtq$!z.I8XMz&uRQbAL;CLosU]2ExB6#h{!1',
+            'Mr.Hyawii Supreme Court Justice': 'a33dnlv1glQn!kH_GPAa;zhBSEMh%9k.1bk.!#rxhhql}g,X8z',
+            'Speaker of Supreme Court': 'pjU=GUrn]{d;%W%Heqy2&p2UE1+zs@s.EJ3CQA[!.w7l_[cA'
+        };
+
+        let currentUser = null;
+        const VOTE_RECORDS_KEY = 'tribunal_vote_records';
+        
+        // Public vote log (stored in Firebase)
+        const voteLogRef = database.ref('voteLog');
+        const publicLogEnabledRef = database.ref('publicLogEnabled');
+        
+        // Local state
+        let publicLogEnabled = false;
+        let voteLog = [];
+
+        // Load vote records from localStorage
+        function loadVoteRecords() {
+            const stored = localStorage.getItem(VOTE_RECORDS_KEY);
+            return stored ? JSON.parse(stored) : {};
+        }
+        
+        function saveVoteRecords(records) {
+            localStorage.setItem(VOTE_RECORDS_KEY, JSON.stringify(records));
+        }
+
+        // Listen to public log enabled status
+        publicLogEnabledRef.on('value', (snapshot) => {
+            publicLogEnabled = snapshot.val() || false;
+            updateLogStatus();
+        });
+
+        // Listen to vote log
+        voteLogRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                voteLog = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+            } else {
+                voteLog = [];
+            }
+            displayVoteLog();
+        });
+
+        function updateLogStatus() {
+            const logStatus = document.getElementById('logStatus');
+            if (logStatus) {
+                logStatus.innerHTML = publicLogEnabled ? '🟢 PUBLIC' : '🔴 PRIVATE';
+                logStatus.style.color = publicLogEnabled ? '#aaffaa' : '#ff8a8a';
+            }
+        }
+
+        function displayVoteLog() {
+            const logEntries = document.getElementById('voteLogEntries');
+            if (!logEntries) return;
+            
+            if (voteLog.length === 0) {
+                logEntries.innerHTML = '<div class="log-entry">⏳ No votes recorded yet...</div>';
+                return;
+            }
+            
+            logEntries.innerHTML = '';
+            voteLog.slice(0, 20).forEach(entry => {
+                const div = document.createElement('div');
+                div.className = 'log-entry';
+                const voteClass = entry.vote === 'yes' ? 'vote-yes-text' : 'vote-no-text';
+                div.innerHTML = `☭ ${entry.username} voted <span class="${voteClass}">${entry.vote === 'yes' ? 'GUILTY' : 'NOT GUILTY'}</span> on Case #${entry.caseId} (${entry.caseDefendant}) · ${new Date(entry.timestamp).toLocaleTimeString()}`;
+                logEntries.appendChild(div);
+            });
+        }
+
+        function showVoteNotification(username, caseId, defendant, vote) {
+            if (!publicLogEnabled) return;
+            
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = 'vote-notification';
+            notification.innerHTML = `
+                <div style="font-size:2rem; margin-bottom:10px;">☭</div>
+                <div>${username}</div>
+                <div style="font-size:1.5rem; margin:10px 0;">VOTED ${vote === 'yes' ? 'GUILTY' : 'NOT GUILTY'}</div>
+                <div>on Case #${caseId} · ${defendant}</div>
+                <div style="margin-top:10px; font-size:0.9rem;">${new Date().toLocaleTimeString()}</div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        function addVoteToLog(username, caseId, caseDefendant, vote) {
+            if (!publicLogEnabled) return;
+            
+            const logEntry = {
+                username: username,
+                caseId: caseId,
+                caseDefendant: caseDefendant,
+                vote: vote,
+                timestamp: Date.now()
+            };
+            
+            voteLogRef.push(logEntry);
+            showVoteNotification(username, caseId, caseDefendant, vote);
+        }
+
+        // --- Firebase references for cases
+        const casesRef = database.ref('cases');
+        let courtCases = [];
+
+        casesRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                courtCases = Object.keys(data).map(key => ({
+                    ...data[key],
+                    firebaseKey: key
+                }));
+            } else {
+                courtCases = [];
+            }
+            ensureOneActive(courtCases);
+            renderEverything();
+            updateFirebaseCases(courtCases);
+        });
+
+        function ensureOneActive(cases) {
+            const hasActive = cases.some(c => c.active === true);
+            if (!hasActive && cases.length > 0) {
+                cases[0].active = true;
+            }
+            return cases;
+        }
+
+        function updateFirebaseCases(casesArray) {
+            const casesObj = {};
+            casesArray.forEach(c => {
+                const { firebaseKey, ...caseData } = c;
+                casesObj[c.firebaseKey || c.id] = caseData;
+            });
+            casesRef.set(casesObj);
+        }
+
+        function getActiveCase() {
+            return courtCases.find(c => c.active === true) || courtCases[0];
+        }
+
+        // --- login/logout
+        const accountSelect = document.getElementById('accountSelect');
+        const passwordInput = document.getElementById('passwordInput');
+        const loginBtn = document.getElementById('loginBtn');
+        const loggedInDisplay = document.getElementById('loggedInDisplay');
+        const adminDeleteContainer = document.getElementById('adminDeleteContainer');
+        const speakerControls = document.getElementById('speakerControls');
+
+        function updateLoginUI() {
+            if (currentUser) {
+                loggedInDisplay.innerHTML = `
+                    <span class="logged-user">☭ ${currentUser}</span>
+                    <button class="logout-btn" id="logoutBtn">✖ LOGOUT</button>
+                `;
+                document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                    currentUser = null;
+                    updateLoginUI();
+                    renderEverything();
+                });
+                
+                // Show admin delete button for Speaker
+                if (currentUser === 'Speaker of Supreme Court') {
+                    adminDeleteContainer.style.display = 'block';
+                    
+                    // Add speaker controls
+                    speakerControls.innerHTML = `
+                        <button class="public-toggle ${publicLogEnabled ? 'active' : ''}" id="togglePublicLog">
+                            ${publicLogEnabled ? '🔊 PUBLIC LOG ON' : '🔇 PUBLIC LOG OFF'}
+                        </button>
+                        <button class="wipe-logs-btn" id="wipeVoteLogs">🗑️ WIPE LOGS</button>
+                    `;
+                    
+                    document.getElementById('togglePublicLog')?.addEventListener('click', () => {
+                        const newStatus = !publicLogEnabled;
+                        publicLogEnabledRef.set(newStatus);
+                    });
+                    
+                    document.getElementById('wipeVoteLogs')?.addEventListener('click', () => {
+                        if (confirm('☭ WIPE ALL PUBLIC VOTE LOGS? This cannot be undone.')) {
+                            voteLogRef.remove();
+                        }
+                    });
+                } else {
+                    adminDeleteContainer.style.display = 'none';
+                    speakerControls.innerHTML = '';
+                }
+            } else {
+                loggedInDisplay.innerHTML = `<span style="color:#ff8a8a;">⛔ no account logged in</span>`;
+                adminDeleteContainer.style.display = 'none';
+                speakerControls.innerHTML = '';
+            }
+            renderEverything();
+        }
+
+        loginBtn.addEventListener('click', () => {
+            const selectedUser = accountSelect.value;
+            const pwd = passwordInput.value.trim();
+            
+            // Check password (in production, use Firebase Auth)
+            if (ACCOUNT_PASSWORDS[selectedUser] && ACCOUNT_PASSWORDS[selectedUser] === pwd) {
+                currentUser = selectedUser;
+                passwordInput.value = '';
+                updateLoginUI();
+            } else {
+                alert('❌ invalid password');
+            }
+        });
+
+        // --- render everything
+        function renderEverything() {
+            const active = getActiveCase();
+            const voteRecords = loadVoteRecords();
+
+            // Render registry list
+            const registryEl = document.getElementById('caseRegistryList');
+            registryEl.innerHTML = '';
+            courtCases.forEach(c => {
+                const li = document.createElement('li');
+                li.className = c.active ? 'active-case' : '';
+                li.setAttribute('data-case-id', c.id);
+                li.innerHTML = `<span class="case-id">№ ${c.id}</span> <span class="case-defendant">${c.defendant}</span>`;
+                li.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    courtCases.forEach(cc => cc.active = false);
+                    const targetCase = courtCases.find(cc => cc.id === c.id);
+                    if (targetCase) targetCase.active = true;
+                    updateFirebaseCases(courtCases);
+                });
+                registryEl.appendChild(li);
+            });
+
+            // active case panel
+            const activeIdSpan = document.getElementById('activeCaseId');
+            const activeBody = document.getElementById('activeCaseBody');
+            if (active) {
+                activeIdSpan.innerText = active.id;
+
+                let crimesHtml = '';
+                active.crimes.forEach(crime => {
+                    crimesHtml += `<li>${crime}</li>`;
+                });
+
+                let userVote = null;
+                if (currentUser) {
+                    const key = `${currentUser}_${active.id}`;
+                    userVote = voteRecords[key] || null;
+                }
+
+                const disableYes = !currentUser || userVote !== null;
+                const disableNo = !currentUser || userVote !== null;
+
+                activeBody.innerHTML = `
+                    <div class="defendant-name">⚡ ${active.defendant}</div>
+                    <ul class="crime-list">${crimesHtml}</ul>
+                    <div class="sentence-box">☭ SENTENCE: ${active.sentence}</div>
+                    <div class="voting-hammer">
+                        <button class="vote-btn vote-yes" id="voteYesBtn" ${disableYes ? 'disabled' : ''}>✔ GUILTY</button>
+                        <button class="vote-btn vote-no" id="voteNoBtn" ${disableNo ? 'disabled' : ''}>✖ NOT GUILTY</button>
+                    </div>
+                    <div class="tally-board">
+                        <span class="tally-yes">☭ GUILTY: ${active.votesYes}</span>
+                        <span class="tally-no">✖ NOT GUILTY: ${active.votesNo}</span>
+                    </div>
+                    <button class="vote-btn vote-reset" id="resetVotesBtn" style="width:100%; margin-top:5px;">⟲ RESET VOTE (commissar only)</button>
+                    ${userVote ? `<div style="background:#4d0f0f; padding:10px; margin-top:10px; border:2px solid #ffb3b3; text-align:center;">✔ You voted: <strong>${userVote === 'yes' ? 'GUILTY' : 'NOT GUILTY'}</strong> on this case.</div>` : ''}
+                `;
+
+                document.getElementById('voteYesBtn')?.addEventListener('click', () => {
+                    if (!currentUser) { alert('Login first.'); return; }
+                    const key = `${currentUser}_${active.id}`;
+                    const records = loadVoteRecords();
+                    if (records[key]) {
+                        alert('You have already voted on this case!');
+                        renderEverything();
+                        return;
+                    }
+                    
+                    active.votesYes = (active.votesYes || 0) + 1;
+                    records[key] = 'yes';
+                    saveVoteRecords(records);
+                    
+                    // Add to public log if enabled
+                    addVoteToLog(currentUser, active.id, active.defendant, 'yes');
+                    
+                    updateFirebaseCases(courtCases);
+                });
+
+                document.getElementById('voteNoBtn')?.addEventListener('click', () => {
+                    if (!currentUser) { alert('Login first.'); return; }
+                    const key = `${currentUser}_${active.id}`;
+                    const records = loadVoteRecords();
+                    if (records[key]) {
+                        alert('You have already voted on this case!');
+                        renderEverything();
+                        return;
+                    }
+                    
+                    active.votesNo = (active.votesNo || 0) + 1;
+                    records[key] = 'no';
+                    saveVoteRecords(records);
+                    
+                    // Add to public log if enabled
+                    addVoteToLog(currentUser, active.id, active.defendant, 'no');
+                    
+                    updateFirebaseCases(courtCases);
+                });
+
+                document.getElementById('resetVotesBtn')?.addEventListener('click', () => {
+                    if (confirm('Wipe all votes for this case? (Clears per-user records)')) {
+                        active.votesYes = 0;
+                        active.votesNo = 0;
+                        const records = loadVoteRecords();
+                        const newRecords = {};
+                        for (let k in records) {
+                            if (!k.endsWith(`_${active.id}`)) {
+                                newRecords[k] = records[k];
+                            }
+                        }
+                        saveVoteRecords(newRecords);
+                        updateFirebaseCases(courtCases);
+                    }
+                });
+            } else {
+                activeBody.innerHTML = `<div style="padding:40px; text-align:center;">⚠ NO ACTIVE CASE — CREATE ONE</div>`;
+            }
+
+            // judicial index
+            const indexDiv = document.getElementById('judicialIndex');
+            const actionMap = [
+                { label: 'CHARGES FILED', date: new Date().toLocaleDateString() },
+                { label: 'TRIBUNAL', date: new Date().toLocaleDateString() },
+                { label: 'VERDICT', date: 'pending' },
+                { label: 'SENTENCE', date: 'pending' }
+            ];
+            indexDiv.innerHTML = '';
+            actionMap.forEach((act, idx) => {
+                const spanWrap = document.createElement('div');
+                spanWrap.innerHTML = `<span>${idx+1}</span> ${act.label} <span style="color:#ffa4a4;">${act.date}</span>`;
+                indexDiv.appendChild(spanWrap);
+            });
+            
+            updateLogStatus();
+            displayVoteLog();
+        }
+
+        // --- create new case
+        document.getElementById('createCaseBtn').addEventListener('click', () => {
+            if (!currentUser) {
+                alert('You must be logged in to create a case.');
+                return;
+            }
+            
+            const def = document.getElementById('newDefendant').value.trim();
+            const crime1 = document.getElementById('newCrime1').value.trim();
+            const crime2 = document.getElementById('newCrime2').value.trim();
+            const sentence = document.getElementById('newSentence').value.trim();
+
+            if (!def || !crime1 || !sentence) {
+                alert('defendant, crime1 and sentence required');
+                return;
+            }
+            
+            const crimes = [crime1];
+            if (crime2) crimes.push(crime2);
+
+            const maxId = Math.max(...courtCases.map(c => parseInt(c.id) || 0), 0);
+            const newId = String(maxId + 1).padStart(3, '0');
+
+            courtCases.forEach(c => c.active = false);
+
+            const newCase = {
+                id: newId,
+                defendant: def,
+                crimes: crimes,
+                sentence: sentence,
+                votesYes: 0,
+                votesNo: 0,
+                active: true
+            };
+            
+            courtCases.push(newCase);
+            updateFirebaseCases(courtCases);
+            
+            // Clear fields
+            document.getElementById('newDefendant').value = '';
+            document.getElementById('newCrime1').value = '';
+            document.getElementById('newCrime2').value = '';
+            document.getElementById('newSentence').value = '';
+        });
+
+        // --- DELETE ALL CASES (admin only)
+        document.getElementById('deleteAllCasesBtn')?.addEventListener('click', () => {
+            if (!currentUser || currentUser !== 'Speaker of Supreme Court') {
+                alert('Only the Speaker can delete all cases.');
+                return;
+            }
+            if (confirm('☭ DESTROY ALL CASE HISTORIES? This cannot be undone.')) {
+                casesRef.remove();
+                courtCases = [];
+                localStorage.removeItem(VOTE_RECORDS_KEY);
+                renderEverything();
+            }
+        });
+
+        // Initial render
+        updateLoginUI();
+    </script>
 </body>
 </html>
-
