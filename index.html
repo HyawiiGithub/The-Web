@@ -86,6 +86,2220 @@
         }
 
         /* notification popup */
+        .vote-notification, .investigation-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #8b0000;
+            border: 3px solid #ffcc00;
+            color: white;
+            padding: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            z-index: 9999;
+            box-shadow: 0 0 30px #ffcc00;
+            animation: slideIn 0.3s ease-out;
+            max-width: 400px;
+            text-transform: uppercase;
+        }
+        
+        .investigation-notification {
+            background: #00468b;
+            border: 3px solid #00aaff;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* login bar */
+        .login-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2a0303;
+            padding: 10px 25px;
+            border: 2px solid #b30045;
+            flex-wrap: wrap;
+        }
+        .login-select {
+            background: #560e0e;
+            color: #ffc4c4;
+            font-size: 1.3rem;
+            padding: 8px 20px;
+            border: 2px solid #a10022;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .login-btn {
+            background: #8b0000;
+            color: white;
+            border: 2px solid #ff7373;
+            font-size: 1.3rem;
+            padding: 8px 25px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .login-btn:hover { background: #c10000; }
+        .logged-user {
+            font-size: 1.5rem;
+            color: #ffa0a0;
+            background: #3f0808;
+            padding: 5px 25px;
+            border-left: 8px solid red;
+        }
+        .logout-btn {
+            background: #3f3f3f;
+            border: 2px solid #aaaaaa;
+            padding: 5px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* tab navigation */
+        .tab-bar {
+            display: flex;
+            gap: 5px;
+            background: #2a0303;
+            border: 2px solid #b30045;
+            border-bottom: none;
+            padding: 0 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 15px 30px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: #3f1a1a;
+            border: 2px solid #830000;
+            border-bottom: none;
+            color: #ffb3b3;
+            letter-spacing: 2px;
+        }
+        
+        .tab.active {
+            background: #8b1a1a;
+            color: white;
+            border-color: #ff8888;
+            position: relative;
+            top: 2px;
+        }
+        
+        .tab:hover {
+            background: #a32929;
+        }
+
+        /* live indicator + speaker controls */
+        .live-badge {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            background: #3f0000;
+            padding: 8px 20px;
+            border-left: 8px solid #ff2222;
+            font-weight: bold;
+            flex-wrap: wrap;
+        }
+
+        .speaker-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .public-toggle {
+            background: #2a2a2a;
+            color: white;
+            border: 2px solid #ffaa00;
+            padding: 8px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .public-toggle.active {
+            background: #aa7700;
+            border-color: #ffcc00;
+            box-shadow: 0 0 15px #ffcc00;
+        }
+
+        .wipe-logs-btn {
+            background: #4a0000;
+            border: 2px solid #ff0000;
+            color: white;
+            padding: 8px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .investigation-toggle {
+            background: #00468b;
+            color: white;
+            border: 2px solid #00aaff;
+            padding: 8px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .investigation-toggle.active {
+            background: #0066cc;
+            border-color: #88ddff;
+            box-shadow: 0 0 15px #88ddff;
+        }
+        
+        .timer-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #2a2a2a;
+            padding: 5px 15px;
+            border: 2px solid #ffaa00;
+        }
+        
+        .timer-input {
+            background: #1f0404;
+            color: #ffb3b3;
+            border: 2px solid #a10022;
+            padding: 5px;
+            width: 60px;
+            font-size: 1.1rem;
+        }
+        
+        .timer-set-btn {
+            background: #8b0000;
+            color: white;
+            border: 2px solid #ff7373;
+            padding: 5px 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .pulse {
+            width: 18px;
+            height: 18px;
+            background-color: #ff2222;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #ff0000;
+            animation: pulse-red 1.5s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% { opacity: 0.5; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1.3); }
+        }
+
+        /* two columns */
+        .split-panel {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .active-case-panel {
+            flex: 2;
+            min-width: 380px;
+            background: #1f0707e0;
+            border: 2px solid #b30045;
+            padding: 0;
+            backdrop-filter: blur(1px);
+        }
+
+        .case-panel-header {
+            background: #8b1a1a;
+            padding: 15px 20px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-bottom: 2px solid #ff8888;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .case-panel-header.investigation {
+            background: #00468b;
+            border-bottom: 2px solid #88ddff;
+        }
+
+        .case-panel-header span {
+            background: black;
+            color: #ffaaaa;
+            padding: 5px 15px;
+            font-size: 1.2rem;
+            border-radius: 0px;
+            border: 1px solid red;
+        }
+
+        .case-body {
+            padding: 25px;
+        }
+
+        .defendant-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffb3b3;
+            text-transform: uppercase;
+            border-bottom: 3px dotted #a13939;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            word-break: break-word;
+        }
+
+        .investigation-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #aaddff;
+            text-transform: uppercase;
+            border-bottom: 3px dotted #0088ff;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            word-break: break-word;
+        }
+
+        .crime-list {
+            background: #2d0c0c;
+            padding: 20px;
+            list-style: none;
+            margin: 20px 0;
+            border-left: 10px solid #a10022;
+        }
+
+        .crime-list li {
+            font-size: 1.3rem;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .crime-list li::before {
+            content: "☭";
+            color: #ff5e5e;
+            font-size: 1.5rem;
+        }
+
+        .sentence-box {
+            background: #1e0101;
+            padding: 20px;
+            border: 2px dashed #b3003c;
+            font-size: 1.6rem;
+            text-align: center;
+            margin: 25px 0;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .timer-box {
+            background: #2d0c0c;
+            padding: 15px;
+            margin: 20px 0;
+            border: 2px solid #ffaa00;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+        
+        .timer-expired {
+            color: #ff6e6e;
+            font-weight: bold;
+            animation: pulse 1s infinite;
+        }
+        
+        .timer-active {
+            color: #aaffaa;
+        }
+        
+        .result-box {
+            background: #1e0101;
+            padding: 15px;
+            margin: 15px 0;
+            border: 2px solid #ffcc00;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+        
+        .result-pass {
+            color: #aaffaa;
+        }
+        
+        .result-fail {
+            color: #ff6e6e;
+        }
+
+        .voting-hammer {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0 15px;
+        }
+
+        .vote-btn {
+            border: none;
+            background: #3f1a1a;
+            color: white;
+            font-size: 2rem;
+            padding: 20px 40px;
+            font-weight: 900;
+            cursor: pointer;
+            border: 3px solid #830000;
+            transition: 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            flex: 1;
+        }
+
+        .vote-yes {
+            background: #5e0000;
+            box-shadow: 0 0 20px #ff3c3c;
+        }
+
+        .vote-yes:hover:not(:disabled) {
+            background: #9e0000;
+            border-color: #ff8888;
+        }
+
+        .vote-no {
+            background: #2a2a2a;
+            border-color: #5a5a5a;
+        }
+
+        .vote-no:hover:not(:disabled) {
+            background: #3f3f3f;
+            border-color: #aaaaaa;
+        }
+
+        .vote-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            filter: grayscale(80%);
+        }
+
+        .vote-reset {
+            background: #0f2f0f;
+            border-color: #1f7f1f;
+            font-size: 1.2rem;
+            padding: 10px;
+        }
+
+        .vote-reset:disabled {
+            background: #2a2a2a;
+            border-color: #5a5a5a;
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .tally-board {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.8rem;
+            background: #2b0404;
+            padding: 15px 25px;
+            border: 2px solid #a10022;
+            margin-top: 20px;
+        }
+
+        .tally-yes { color: #ff6e6e; }
+        .tally-no { color: #b5b5b5; }
+
+        /* investigation message area */
+        .message-area {
+            background: #1e3a5f;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #0088ff;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .message {
+            background: #0a1a2a;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 5px solid #00aaff;
+        }
+        
+        .message .sender {
+            color: #88ddff;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .message .time {
+            color: #888888;
+            font-size: 0.9rem;
+            float: right;
+        }
+        
+        .message .text {
+            color: white;
+            margin-top: 5px;
+            font-size: 1.1rem;
+        }
+        
+        .message-input-area {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .message-input {
+            flex: 1;
+            background: #0a1a2a;
+            border: 2px solid #0088ff;
+            padding: 15px;
+            color: white;
+            font-size: 1.1rem;
+        }
+        
+        .send-message-btn {
+            background: #0088ff;
+            border: none;
+            padding: 15px 30px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid #88ddff;
+        }
+        
+        .send-message-btn:hover {
+            background: #0066cc;
+        }
+        
+        .convert-to-bill-btn {
+            background: #8b5e00;
+            border: 2px solid #ffaa00;
+            color: white;
+            font-size: 1.3rem;
+            padding: 15px;
+            margin-top: 15px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .convert-to-bill-btn:hover {
+            background: #b87c00;
+        }
+        
+        .end-investigation-btn {
+            background: #4a0000;
+            border: 2px solid #ff0000;
+            color: white;
+            font-size: 1.3rem;
+            padding: 15px;
+            margin-top: 15px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .end-investigation-btn:hover {
+            background: #7a0000;
+        }
+
+        /* case list panel */
+        .case-list-panel {
+            flex: 1.2;
+            background: #130404f0;
+            border: 2px solid #b30045;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .list-header {
+            background: #631111;
+            padding: 15px;
+            font-size: 1.7rem;
+            border-bottom: 2px solid red;
+        }
+        
+        .list-header.investigation {
+            background: #00468b;
+            border-bottom: 2px solid #88ddff;
+        }
+
+        .case-registry {
+            list-style: none;
+            overflow-y: auto;
+            max-height: 350px;
+        }
+
+        .case-registry li {
+            padding: 18px 15px;
+            border-bottom: 1px solid #7a1f1f;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .investigation-registry li {
+            border-bottom: 1px solid #004488;
+        }
+
+        .case-registry li:hover {
+            background: #8b2626;
+            padding-left: 25px;
+        }
+        
+        .investigation-registry li:hover {
+            background: #004488;
+        }
+
+        .active-case {
+            background: #a32929;
+            border-left: 12px solid #ffd900;
+            font-weight: bold;
+        }
+        
+        .active-investigation {
+            background: #004488;
+            border-left: 12px solid #88ddff;
+            font-weight: bold;
+        }
+        
+        .closed-investigation {
+            opacity: 0.6;
+            background: #1a1a1a;
+        }
+
+        .case-id {
+            font-size: 1.4rem;
+            color: #ffaeae;
+        }
+        
+        .investigation-id {
+            color: #88ddff;
+        }
+
+        .case-defendant {
+            font-size: 1.1rem;
+            max-width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* public vote log */
+        .vote-log-panel {
+            background: #1f0404;
+            border: 2px solid #b30045;
+            margin-top: 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .investigation-log-panel {
+            background: #0a1a2a;
+            border: 2px solid #0088ff;
+        }
+
+        .log-header {
+            background: #631111;
+            padding: 10px 15px;
+            font-size: 1.4rem;
+            border-bottom: 2px solid red;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .log-header.investigation {
+            background: #00468b;
+            border-bottom: 2px solid #88ddff;
+        }
+
+        .log-entries {
+            padding: 10px;
+        }
+
+        .log-entry {
+            padding: 8px;
+            border-bottom: 1px solid #7a1f1f;
+            font-size: 1.1rem;
+            color: #ffb3b3;
+        }
+        
+        .investigation-log-entry {
+            border-bottom: 1px solid #004488;
+            color: #aaddff;
+        }
+
+        .log-entry .vote-yes-text { color: #ff6e6e; font-weight: bold; }
+        .log-entry .vote-no-text { color: #b5b5b5; font-weight: bold; }
+
+        /* court members list */
+        .court-members {
+            background: #1f0404;
+            border: 2px solid #b30045;
+            border-top: none;
+            padding: 10px 15px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 1.1rem;
+        }
+        
+        .court-member {
+            color: #ffb3b3;
+            padding: 3px 10px;
+            border-left: 3px solid #a10022;
+        }
+        
+        .court-member.speaker {
+            border-left: 3px solid #ffcc00;
+            color: #ffcc00;
+            font-weight: bold;
+        }
+
+        .new-case-form {
+            padding: 20px;
+            background: #1f0404;
+            border-top: 3px solid #a10022;
+        }
+
+        .new-case-form h3 {
+            font-size: 1.7rem;
+            margin-bottom: 15px;
+            border-left: 6px solid red;
+            padding-left: 10px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .form-row input, .form-row textarea {
+            background: #320a0a;
+            border: 2px solid #a13939;
+            padding: 12px;
+            color: #ffd7d7;
+            font-size: 1.1rem;
+            resize: vertical;
+        }
+
+        .form-row label {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            color: #ffbebe;
+        }
+
+        .create-btn {
+            background: #8b0000;
+            border: none;
+            padding: 18px;
+            font-size: 1.7rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            border: 2px solid #ff5e5e;
+            width: 100%;
+            letter-spacing: 4px;
+        }
+
+        .create-btn:hover {
+            background: #c20000;
+        }
+
+        .create-btn:disabled {
+            background: #4a0000;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .delete-all-btn {
+            background: #4a0000;
+            border: 3px solid #ff0000;
+            color: white;
+            font-size: 1.3rem;
+            padding: 12px;
+            margin-top: 10px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .delete-all-btn:hover {
+            background: #7a0000;
+        }
+
+        .footer-index {
+            background: #1e0303;
+            border: 2px solid #b3002d;
+            padding: 15px;
+            font-size: 1.2rem;
+        }
+
+        .index-log {
+            display: flex;
+            gap: 35px;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            color: #ffbaba;
+        }
+
+        .index-log div span {
+            font-weight: 900;
+            color: white;
+            background: #910000;
+            padding: 3px 12px;
+            margin-right: 10px;
+        }
+    </style>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+</head>
+<body>
+    <div class="parliament">
+
+        <!-- header -->
+        <div class="supreme-header">
+            <h1>☭ SUPREME COURT OF THE UNION OF GAMING
+                <small>REVOLUTIONARY COURT RULINGS · LIVE SOVIET</small>
+            </h1>
+            <div class="stamp">☭ ПРАВДА</div>
+        </div>
+
+        <!-- login bar -->
+        <div class="login-bar" id="loginBar">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span style="font-size:1.5rem;">👤 ACCOUNT:</span>
+                <select id="accountSelect" class="login-select">
+                    <option value="Mr.Mcdonalds Supreme Court Justice">Mr.Mcdonalds Supreme Court Justice</option>
+                    <option value="Mr.Stratz Supreme Court Justice">Mr.Stratz Supreme Court Justice</option>
+                    <option value="Mr.Hyawii Supreme Court Justice">Mr.Hyawii Supreme Court Justice</option>
+                    <option value="Speaker of Supreme Court">Supreme Court Speaker</option>
+                </select>
+                <input type="password" id="passwordInput" placeholder="password" style="padding:8px; background:#2f0808; color:#ffbebe; border:2px solid #a10022; font-size:1.2rem;">
+                <button id="loginBtn" class="login-btn">☭ LOGIN</button>
+            </div>
+            <div id="loggedInDisplay" style="display: flex; align-items: center; gap: 15px;"></div>
+        </div>
+
+        <!-- tab navigation - NOW WITH INVESTIGATIONS -->
+        <div class="tab-bar">
+            <div class="tab active" id="tabCases">📋 COURT CASES</div>
+            <div class="tab" id="tabBills">📜 SUPREME BILLS</div>
+            <div class="tab" id="tabInvestigations">🔍 ONGOING INVESTIGATIONS</div>
+        </div>
+
+        <!-- live indicator + speaker controls -->
+        <div class="live-badge">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="pulse"></div>
+                <div>⚡ LIVE PEOPLE'S TRIBUNAL · THE REPUBLIC SHALL PROSPER</div>
+            </div>
+            <div class="speaker-controls" id="speakerControls">
+                <!-- dynamically filled if speaker logged in -->
+            </div>
+        </div>
+
+        <!-- COURT MEMBERS LIST -->
+        <div class="court-members">
+            <span class="court-member">Mr.Mcdonalds Supreme Court Justice</span>
+            <span class="court-member">Mr.Stratz Supreme Court Justice</span>
+            <span class="court-member">Mr.Hyawii Supreme Court Justice</span>
+            <span class="court-member speaker">Speaker of Supreme Court</span>
+        </div>
+
+        <!-- MAIN two columns - CASES TAB -->
+        <div id="casesSection">
+            <div class="split-panel">
+                <!-- LEFT: case registry + create new + vote log -->
+                <div class="case-list-panel">
+                    <div class="list-header">📋 COURT CASES REGISTRY</div>
+                    <ul class="case-registry" id="caseRegistryList"></ul>
+                    
+                    <!-- PUBLIC VOTE LOG -->
+                    <div class="vote-log-panel">
+                        <div class="log-header">
+                            <span>📢 PUBLIC VOTE LOG</span>
+                            <span id="logStatus">🔴 PRIVATE</span>
+                        </div>
+                        <div class="log-entries" id="voteLogEntries">
+                            <div class="log-entry">⏳ Waiting for votes...</div>
+                        </div>
+                    </div>
+
+                    <div class="new-case-form">
+                        <h3>➕ FILE NEW CASE</h3>
+                        <div class="form-row">
+                            <label>Defendant</label>
+                            <input type="text" id="newDefendant" placeholder="e.g. osimate">
+                        </div>
+                        <div class="form-row">
+                            <label>Crime 1</label>
+                            <input type="text" id="newCrime1" placeholder="hungarian">
+                        </div>
+                        <div class="form-row">
+                            <label>Crime 2</label>
+                            <input type="text" id="newCrime2" placeholder="whispers of counter revolutionary ideas">
+                        </div>
+                        <div class="form-row">
+                            <label>Proposed sentence</label>
+                            <input type="text" id="newSentence" placeholder="Extermination">
+                        </div>
+                        <button class="create-btn" id="createCaseBtn">☭ SUBMIT TO COURT REGISTRY</button>
+                    </div>
+                </div>
+
+                <!-- RIGHT: active case voting panel -->
+                <div class="active-case-panel" id="activeCasePanel">
+                    <div class="case-panel-header">
+                        <span>ACTIVE CASE № <span id="activeCaseId">001</span></span>
+                        <span>☭ PEOPLE'S VOTE</span>
+                    </div>
+                    <div class="case-body" id="activeCaseBody"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN two columns - BILLS TAB -->
+        <div id="billsSection" style="display: none;">
+            <div class="split-panel">
+                <!-- LEFT: bill registry + create new + vote log -->
+                <div class="case-list-panel">
+                    <div class="list-header">📜 SUPREME BILLS REGISTRY</div>
+                    <ul class="case-registry" id="billRegistryList"></ul>
+                    
+                    <!-- PUBLIC BILL VOTE LOG -->
+                    <div class="vote-log-panel">
+                        <div class="log-header">
+                            <span>📢 PUBLIC BILL VOTE LOG</span>
+                            <span id="billLogStatus">🔴 PRIVATE</span>
+                        </div>
+                        <div class="log-entries" id="billLogEntries">
+                            <div class="log-entry">⏳ Waiting for votes...</div>
+                        </div>
+                    </div>
+
+                    <div class="new-case-form">
+                        <h3>➕ PROPOSE NEW BILL</h3>
+                        <div class="form-row">
+                            <label>Bill Title</label>
+                            <input type="text" id="newBillTitle" placeholder="e.g. Revolutionary Tax Reform">
+                        </div>
+                        <div class="form-row">
+                            <label>Bill Description</label>
+                            <textarea id="newBillDesc" rows="2" placeholder="Details of the proposed bill..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <label>Proposed by</label>
+                            <input type="text" id="newBillProposer" placeholder="Your name">
+                        </div>
+                        <button class="create-btn" id="createBillBtn">☭ SUBMIT BILL TO PARLIAMENT</button>
+                        
+                        <!-- Admin delete button for bills -->
+                        <div id="adminBillDeleteContainer" style="display: none; margin-top: 15px;">
+                            <button class="delete-all-btn" id="deleteAllBillsBtn">☭ DELETE ALL BILL HISTORIES (ADMIN ONLY)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: active bill voting panel -->
+                <div class="active-case-panel" id="activeBillPanel">
+                    <div class="case-panel-header">
+                        <span>ACTIVE BILL № <span id="activeBillId">001</span></span>
+                        <span>☭ PARLIAMENT VOTE</span>
+                    </div>
+                    <div class="case-body" id="activeBillBody"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN two columns - INVESTIGATIONS TAB -->
+        <div id="investigationsSection" style="display: none;">
+            <div class="split-panel">
+                <!-- LEFT: investigation registry + create new + log -->
+                <div class="case-list-panel">
+                    <div class="list-header investigation">🔍 ONGOING INVESTIGATIONS</div>
+                    <ul class="case-registry investigation-registry" id="investigationRegistryList"></ul>
+                    
+                    <!-- INVESTIGATION LOG -->
+                    <div class="vote-log-panel investigation-log-panel">
+                        <div class="log-header investigation">
+                            <span>📢 INVESTIGATION ACTIVITY LOG</span>
+                            <span id="investigationLogStatus">🔴 PRIVATE</span>
+                        </div>
+                        <div class="log-entries" id="investigationLogEntries">
+                            <div class="log-entry investigation-log-entry">⏳ Waiting for activity...</div>
+                        </div>
+                    </div>
+
+                    <div class="new-case-form">
+                        <h3>➕ LAUNCH NEW INVESTIGATION</h3>
+                        <div class="form-row">
+                            <label>Investigation Title</label>
+                            <input type="text" id="newInvestigationTitle" placeholder="e.g. Corruption in the Proletariat">
+                        </div>
+                        <div class="form-row">
+                            <label>Subject/Target</label>
+                            <input type="text" id="newInvestigationTarget" placeholder="Who or what is being investigated?">
+                        </div>
+                        <div class="form-row">
+                            <label>Initial Findings</label>
+                            <textarea id="newInvestigationFindings" rows="2" placeholder="Preliminary information..."></textarea>
+                        </div>
+                        <button class="create-btn" id="createInvestigationBtn">🔍 LAUNCH INVESTIGATION</button>
+                        
+                        <!-- Admin delete button for investigations -->
+                        <div id="adminInvestigationDeleteContainer" style="display: none; margin-top: 15px;">
+                            <button class="delete-all-btn" id="deleteAllInvestigationsBtn">☭ DELETE ALL INVESTIGATIONS (ADMIN ONLY)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: active investigation panel -->
+                <div class="active-case-panel" id="activeInvestigationPanel">
+                    <div class="case-panel-header investigation">
+                        <span>ACTIVE INVESTIGATION № <span id="activeInvestigationId">001</span></span>
+                        <span>🔍 CLASSIFIED</span>
+                    </div>
+                    <div class="case-body" id="activeInvestigationBody"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin delete container for cases -->
+        <div id="adminDeleteContainer" style="display: none; margin-top: 10px;">
+            <button class="delete-all-btn" id="deleteAllCasesBtn">☭ DELETE ALL CASE HISTORIES (ADMIN ONLY)</button>
+        </div>
+
+        <!-- judicial index log -->
+        <div class="footer-index">
+            <div class="index-log" id="judicialIndex"></div>
+        </div>
+    </div>
+
+    <!-- Notification container for popups -->
+    <div id="notificationContainer"></div>
+
+    <script>
+        // ================== FIREBASE INIT =====================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBwDpAdLqHdoFPUt0Ovy4uG-MFd0WIrY2w",
+            authDomain: "union-of-gaming-court.firebaseapp.com",
+            databaseURL: "https://union-of-gaming-court-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "union-of-gaming-court",
+            storageBucket: "union-of-gaming-court.firebasestorage.app",
+            messagingSenderId: "883947931712",
+            appId: "1:883947931712:web:edcd23d5b38c055be2f7a5",
+            measurementId: "G-K3C0X16F1R"
+        };
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // ================== ACCOUNTS WITH SECURE PASSWORDS =====================
+        const ACCOUNT_PASSWORDS = {
+            'Mr.Mcdonalds Supreme Court Justice': '@!5b[Jj@n.zSqKYBlj;02%HW}LWzWfl~$u%HcqwaC]1MrT3z2v',
+            'Mr.Stratz Supreme Court Justice': 'R_94V6~Ds_}3MWtq$!z.I8XMz&uRQbAL;CLosU]2ExB6#h{!1',
+            'Mr.Hyawii Supreme Court Justice': 'a33dnlv1glQn!kH_GPAa;zhBSEMh%9k.1bk.!#rxhhql}g,X8z',
+            'Speaker of Supreme Court': 'pjU=GUrn]{d;%W%Heqy2&p2UE1+zs@s.EJ3CQA[!.w7l_[cA'
+        };
+
+        let currentUser = null;
+        let currentTab = 'cases'; // 'cases', 'bills', or 'investigations'
+        
+        const VOTE_RECORDS_KEY = 'tribunal_vote_records';
+        const BILL_VOTE_RECORDS_KEY = 'bill_vote_records';
+        
+        // Public vote logs
+        const voteLogRef = database.ref('voteLog');
+        const billVoteLogRef = database.ref('billVoteLog');
+        const investigationLogRef = database.ref('investigationLog');
+        const publicLogEnabledRef = database.ref('publicLogEnabled');
+        const investigationPublicRef = database.ref('investigationPublic');
+        
+        // Timer settings
+        const MIN_TIMER_HOURS = 24; // Minimum 24 hours
+        const DEFAULT_TIMER_HOURS = 24;
+        
+        // Local state
+        let publicLogEnabled = false;
+        let investigationPublic = false;
+        let voteLog = [];
+        let billVoteLog = [];
+        let investigationLog = [];
+
+        // Load vote records
+        function loadVoteRecords() {
+            const stored = localStorage.getItem(VOTE_RECORDS_KEY);
+            return stored ? JSON.parse(stored) : {};
+        }
+        
+        function saveVoteRecords(records) {
+            localStorage.setItem(VOTE_RECORDS_KEY, JSON.stringify(records));
+        }
+        
+        function loadBillVoteRecords() {
+            const stored = localStorage.getItem(BILL_VOTE_RECORDS_KEY);
+            return stored ? JSON.parse(stored) : {};
+        }
+        
+        function saveBillVoteRecords(records) {
+            localStorage.setItem(BILL_VOTE_RECORDS_KEY, JSON.stringify(records));
+        }
+
+        // Listen to public log enabled status
+        publicLogEnabledRef.on('value', (snapshot) => {
+            publicLogEnabled = snapshot.val() || false;
+            updateLogStatus();
+        });
+        
+        // Listen to investigation public status
+        investigationPublicRef.on('value', (snapshot) => {
+            investigationPublic = snapshot.val() || false;
+            updateInvestigationStatus();
+        });
+
+        // Listen to logs
+        voteLogRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                voteLog = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+            } else {
+                voteLog = [];
+            }
+            displayVoteLog();
+        });
+        
+        billVoteLogRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                billVoteLog = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+            } else {
+                billVoteLog = [];
+            }
+            displayBillVoteLog();
+        });
+        
+        investigationLogRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                investigationLog = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+            } else {
+                investigationLog = [];
+            }
+            displayInvestigationLog();
+        });
+
+        function updateLogStatus() {
+            const logStatus = document.getElementById('logStatus');
+            const billLogStatus = document.getElementById('billLogStatus');
+            if (logStatus) {
+                logStatus.innerHTML = publicLogEnabled ? '🟢 PUBLIC' : '🔴 PRIVATE';
+                logStatus.style.color = publicLogEnabled ? '#aaffaa' : '#ff8a8a';
+            }
+            if (billLogStatus) {
+                billLogStatus.innerHTML = publicLogEnabled ? '🟢 PUBLIC' : '🔴 PRIVATE';
+                billLogStatus.style.color = publicLogEnabled ? '#aaffaa' : '#ff8a8a';
+            }
+        }
+        
+        function updateInvestigationStatus() {
+            const invLogStatus = document.getElementById('investigationLogStatus');
+            if (invLogStatus) {
+                invLogStatus.innerHTML = investigationPublic ? '🟢 PUBLIC' : '🔴 PRIVATE';
+                invLogStatus.style.color = investigationPublic ? '#aaffaa' : '#ff8a8a';
+            }
+        }
+
+        function displayVoteLog() {
+            const logEntries = document.getElementById('voteLogEntries');
+            if (!logEntries) return;
+            
+            if (voteLog.length === 0) {
+                logEntries.innerHTML = '<div class="log-entry">⏳ No votes recorded yet...</div>';
+                return;
+            }
+            
+            logEntries.innerHTML = '';
+            voteLog.slice(0, 20).forEach(entry => {
+                const div = document.createElement('div');
+                div.className = 'log-entry';
+                const voteClass = entry.vote === 'yes' ? 'vote-yes-text' : 'vote-no-text';
+                div.innerHTML = `☭ ${entry.username} voted <span class="${voteClass}">${entry.vote === 'yes' ? 'GUILTY' : 'NOT GUILTY'}</span> on Case #${entry.caseId} (${entry.caseDefendant}) · ${new Date(entry.timestamp).toLocaleTimeString()}`;
+                logEntries.appendChild(div);
+            });
+        }
+        
+        function displayBillVoteLog() {
+            const logEntries = document.getElementById('billLogEntries');
+            if (!logEntries) return;
+            
+            if (billVoteLog.length === 0) {
+                logEntries.innerHTML = '<div class="log-entry">⏳ No bill votes recorded yet...</div>';
+                return;
+            }
+            
+            logEntries.innerHTML = '';
+            billVoteLog.slice(0, 20).forEach(entry => {
+                const div = document.createElement('div');
+                div.className = 'log-entry';
+                const voteClass = entry.vote === 'yes' ? 'vote-yes-text' : 'vote-no-text';
+                div.innerHTML = `☭ ${entry.username} voted <span class="${voteClass}">${entry.vote === 'yes' ? 'FOR' : 'AGAINST'}</span> on Bill #${entry.billId} (${entry.billTitle}) · ${new Date(entry.timestamp).toLocaleTimeString()}`;
+                logEntries.appendChild(div);
+            });
+        }
+        
+        function displayInvestigationLog() {
+            const logEntries = document.getElementById('investigationLogEntries');
+            if (!logEntries) return;
+            
+            if (investigationLog.length === 0) {
+                logEntries.innerHTML = '<div class="log-entry investigation-log-entry">⏳ No investigation activity yet...</div>';
+                return;
+            }
+            
+            logEntries.innerHTML = '';
+            investigationLog.slice(0, 20).forEach(entry => {
+                const div = document.createElement('div');
+                div.className = 'log-entry investigation-log-entry';
+                
+                if (entry.type === 'message') {
+                    div.innerHTML = `💬 ${entry.username} · ${entry.message} · ${new Date(entry.timestamp).toLocaleTimeString()}`;
+                } else if (entry.type === 'status') {
+                    div.innerHTML = `📢 ${entry.message} · ${new Date(entry.timestamp).toLocaleTimeString()}`;
+                }
+                
+                logEntries.appendChild(div);
+            });
+        }
+
+        function showNotification(username, message, isInvestigation = false) {
+            let shouldShow = isInvestigation ? investigationPublic : publicLogEnabled;
+            if (!shouldShow) return;
+            
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = isInvestigation ? 'investigation-notification' : 'vote-notification';
+            
+            notification.innerHTML = `
+                <div style="font-size:2rem; margin-bottom:10px;">${isInvestigation ? '🔍' : '☭'}</div>
+                <div>${username}</div>
+                <div style="font-size:1.3rem; margin:10px 0;">${message}</div>
+                <div style="margin-top:10px; font-size:0.9rem;">${new Date().toLocaleTimeString()}</div>
+            `;
+            
+            container.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        function addToInvestigationLog(username, message, type = 'message') {
+            if (!investigationPublic) return;
+            
+            const logEntry = {
+                username: username,
+                message: message,
+                type: type,
+                timestamp: Date.now()
+            };
+            
+            investigationLogRef.push(logEntry);
+            showNotification(username, message, true);
+        }
+
+        // --- Firebase references
+        const casesRef = database.ref('cases');
+        const billsRef = database.ref('bills');
+        const investigationsRef = database.ref('investigations');
+        
+        let courtCases = [];
+        let courtBills = [];
+        let investigations = [];
+
+        // Listen to cases
+        casesRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                courtCases = Object.keys(data).map(key => ({
+                    ...data[key],
+                    firebaseKey: key
+                }));
+            } else {
+                courtCases = [];
+            }
+            ensureOneActive(courtCases);
+            if (currentTab === 'cases') renderEverything();
+            updateFirebaseCases(courtCases);
+        });
+        
+        // Listen to bills
+        billsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                courtBills = Object.keys(data).map(key => ({
+                    ...data[key],
+                    firebaseKey: key
+                }));
+            } else {
+                courtBills = [];
+            }
+            ensureOneActive(courtBills);
+            if (currentTab === 'bills') renderBills();
+            updateFirebaseBills(courtBills);
+        });
+        
+        // Listen to investigations
+        investigationsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                investigations = Object.keys(data).map(key => ({
+                    ...data[key],
+                    firebaseKey: key
+                }));
+            } else {
+                investigations = [];
+            }
+            ensureOneActive(investigations);
+            if (currentTab === 'investigations') renderInvestigations();
+            updateFirebaseInvestigations(investigations);
+        });
+
+        function ensureOneActive(items) {
+            const hasActive = items.some(c => c.active === true);
+            if (!hasActive && items.length > 0) {
+                items[0].active = true;
+            }
+            return items;
+        }
+
+        function updateFirebaseCases(casesArray) {
+            const casesObj = {};
+            casesArray.forEach(c => {
+                const { firebaseKey, ...caseData } = c;
+                casesObj[c.firebaseKey || c.id] = caseData;
+            });
+            casesRef.set(casesObj);
+        }
+        
+        function updateFirebaseBills(billsArray) {
+            const billsObj = {};
+            billsArray.forEach(b => {
+                const { firebaseKey, ...billData } = b;
+                billsObj[b.firebaseKey || b.id] = billData;
+            });
+            billsRef.set(billsObj);
+        }
+        
+        function updateFirebaseInvestigations(invArray) {
+            const invObj = {};
+            invArray.forEach(i => {
+                const { firebaseKey, ...invData } = i;
+                invObj[i.firebaseKey || i.id] = invData;
+            });
+            investigationsRef.set(invObj);
+        }
+
+        function getActiveCase() {
+            return courtCases.find(c => c.active === true) || courtCases[0];
+        }
+        
+        function getActiveBill() {
+            return courtBills.find(b => b.active === true) || courtBills[0];
+        }
+        
+        function getActiveInvestigation() {
+            return investigations.find(i => i.active === true) || investigations[0];
+        }
+
+        // Check if timer has expired
+        function isTimerExpired(item) {
+            if (!item.timerEnd) return false;
+            return Date.now() > item.timerEnd;
+        }
+        
+        // Get timer display
+        function getTimerDisplay(item) {
+            if (!item.timerEnd) return 'No timer set';
+            
+            const now = Date.now();
+            if (now > item.timerEnd) return 'EXPIRED';
+            
+            const hoursLeft = Math.floor((item.timerEnd - now) / (1000 * 60 * 60));
+            const minutesLeft = Math.floor(((item.timerEnd - now) % (1000 * 60 * 60)) / (1000 * 60));
+            
+            return `${hoursLeft}h ${minutesLeft}m remaining`;
+        }
+        
+        // Check if voting should be disabled
+        function isVotingDisabled(item) {
+            if (!item.timerEnd) return false;
+            return Date.now() > item.timerEnd;
+        }
+        
+        // Calculate result based on votes
+        function getVoteResult(item) {
+            if (!item.timerEnd) return null;
+            if (Date.now() <= item.timerEnd) return null;
+            
+            const total = (item.votesYes || 0) + (item.votesNo || 0);
+            if (total === 0) return 'NO VOTES';
+            
+            return (item.votesYes || 0) > (item.votesNo || 0) ? 'PASSED' : 'FAILED';
+        }
+
+        // --- login/logout
+        const accountSelect = document.getElementById('accountSelect');
+        const passwordInput = document.getElementById('passwordInput');
+        const loginBtn = document.getElementById('loginBtn');
+        const loggedInDisplay = document.getElementById('loggedInDisplay');
+        const adminDeleteContainer = document.getElementById('adminDeleteContainer');
+        const adminBillDeleteContainer = document.getElementById('adminBillDeleteContainer');
+        const adminInvestigationDeleteContainer = document.getElementById('adminInvestigationDeleteContainer');
+        const speakerControls = document.getElementById('speakerControls');
+        
+        // Tab elements
+        const tabCases = document.getElementById('tabCases');
+        const tabBills = document.getElementById('tabBills');
+        const tabInvestigations = document.getElementById('tabInvestigations');
+        const casesSection = document.getElementById('casesSection');
+        const billsSection = document.getElementById('billsSection');
+        const investigationsSection = document.getElementById('investigationsSection');
+
+        // Tab switching
+        tabCases.addEventListener('click', () => {
+            tabCases.classList.add('active');
+            tabBills.classList.remove('active');
+            tabInvestigations.classList.remove('active');
+            casesSection.style.display = 'flex';
+            billsSection.style.display = 'none';
+            investigationsSection.style.display = 'none';
+            currentTab = 'cases';
+            renderEverything();
+        });
+        
+        tabBills.addEventListener('click', () => {
+            tabBills.classList.add('active');
+            tabCases.classList.remove('active');
+            tabInvestigations.classList.remove('active');
+            casesSection.style.display = 'none';
+            billsSection.style.display = 'flex';
+            investigationsSection.style.display = 'none';
+            currentTab = 'bills';
+            renderBills();
+        });
+        
+        tabInvestigations.addEventListener('click', () => {
+            tabInvestigations.classList.add('active');
+            tabCases.classList.remove('active');
+            tabBills.classList.remove('active');
+            casesSection.style.display = 'none';
+            billsSection.style.display = 'none';
+            investigationsSection.style.display = 'flex';
+            currentTab = 'investigations';
+            renderInvestigations();
+        });
+
+        function updateLoginUI() {
+            if (currentUser) {
+                loggedInDisplay.innerHTML = `
+                    <span class="logged-user">☭ ${currentUser}</span>
+                    <button class="logout-btn" id="logoutBtn">✖ LOGOUT</button>
+                `;
+                document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                    currentUser = null;
+                    updateLoginUI();
+                    if (currentTab === 'cases') renderEverything();
+                    else if (currentTab === 'bills') renderBills();
+                    else renderInvestigations();
+                });
+                
+                // Show admin delete buttons for Speaker
+                if (currentUser === 'Speaker of Supreme Court') {
+                    adminDeleteContainer.style.display = 'block';
+                    adminBillDeleteContainer.style.display = 'block';
+                    adminInvestigationDeleteContainer.style.display = 'block';
+                    
+                    // Add speaker controls with timer and investigation toggle
+                    speakerControls.innerHTML = `
+                        <div class="timer-control">
+                            <span>⏱️ Timer (min 24h):</span>
+                            <input type="number" id="timerHours" class="timer-input" value="24" min="24" step="1">
+                            <span>hours</span>
+                            <button class="timer-set-btn" id="setTimerBtn">SET FOR ACTIVE</button>
+                        </div>
+                        <button class="public-toggle ${publicLogEnabled ? 'active' : ''}" id="togglePublicLog">
+                            ${publicLogEnabled ? '🔊 PUBLIC LOG ON' : '🔇 PUBLIC LOG OFF'}
+                        </button>
+                        <button class="investigation-toggle ${investigationPublic ? 'active' : ''}" id="toggleInvestigationPublic">
+                            ${investigationPublic ? '🔊 INV. PUBLIC' : '🔇 INV. PRIVATE'}
+                        </button>
+                        <button class="wipe-logs-btn" id="wipeVoteLogs">🗑️ WIPE LOGS</button>
+                    `;
+                    
+                    document.getElementById('togglePublicLog')?.addEventListener('click', () => {
+                        const newStatus = !publicLogEnabled;
+                        publicLogEnabledRef.set(newStatus);
+                    });
+                    
+                    document.getElementById('toggleInvestigationPublic')?.addEventListener('click', () => {
+                        const newStatus = !investigationPublic;
+                        investigationPublicRef.set(newStatus);
+                    });
+                    
+                    document.getElementById('wipeVoteLogs')?.addEventListener('click', () => {
+                        if (confirm('☭ WIPE ALL PUBLIC LOGS? This cannot be undone.')) {
+                            voteLogRef.remove();
+                            billVoteLogRef.remove();
+                            investigationLogRef.remove();
+                        }
+                    });
+                    
+                    document.getElementById('setTimerBtn')?.addEventListener('click', () => {
+                        const hours = parseInt(document.getElementById('timerHours').value);
+                        if (hours < MIN_TIMER_HOURS) {
+                            alert(`Timer must be at least ${MIN_TIMER_HOURS} hours!`);
+                            return;
+                        }
+                        
+                        if (currentTab === 'cases') {
+                            const active = getActiveCase();
+                            if (active) {
+                                active.timerEnd = Date.now() + (hours * 60 * 60 * 1000);
+                                updateFirebaseCases(courtCases);
+                                renderEverything();
+                            }
+                        } else if (currentTab === 'bills') {
+                            const active = getActiveBill();
+                            if (active) {
+                                active.timerEnd = Date.now() + (hours * 60 * 60 * 1000);
+                                updateFirebaseBills(courtBills);
+                                renderBills();
+                            }
+                        }
+                    });
+                } else {
+                    adminDeleteContainer.style.display = 'none';
+                    adminBillDeleteContainer.style.display = 'none';
+                    adminInvestigationDeleteContainer.style.display = 'none';
+                    speakerControls.innerHTML = '';
+                }
+            } else {
+                loggedInDisplay.innerHTML = `<span style="color:#ff8a8a;">⛔ no account logged in</span>`;
+                adminDeleteContainer.style.display = 'none';
+                adminBillDeleteContainer.style.display = 'none';
+                adminInvestigationDeleteContainer.style.display = 'none';
+                speakerControls.innerHTML = '';
+            }
+            if (currentTab === 'cases') renderEverything();
+            else if (currentTab === 'bills') renderBills();
+            else renderInvestigations();
+        }
+
+        loginBtn.addEventListener('click', () => {
+            const selectedUser = accountSelect.value;
+            const pwd = passwordInput.value.trim();
+            
+            if (ACCOUNT_PASSWORDS[selectedUser] && ACCOUNT_PASSWORDS[selectedUser] === pwd) {
+                currentUser = selectedUser;
+                passwordInput.value = '';
+                updateLoginUI();
+            } else {
+                alert('❌ invalid password');
+            }
+        });
+
+        // --- render cases
+        function renderEverything() {
+            const active = getActiveCase();
+            const voteRecords = loadVoteRecords();
+
+            // Render registry list
+            const registryEl = document.getElementById('caseRegistryList');
+            registryEl.innerHTML = '';
+            courtCases.forEach(c => {
+                const li = document.createElement('li');
+                li.className = c.active ? 'active-case' : '';
+                li.setAttribute('data-case-id', c.id);
+                li.innerHTML = `<span class="case-id">№ ${c.id}</span> <span class="case-defendant">${c.defendant}</span>`;
+                li.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    courtCases.forEach(cc => cc.active = false);
+                    const targetCase = courtCases.find(cc => cc.id === c.id);
+                    if (targetCase) targetCase.active = true;
+                    updateFirebaseCases(courtCases);
+                });
+                registryEl.appendChild(li);
+            });
+
+            // active case panel
+            const activeIdSpan = document.getElementById('activeCaseId');
+            const activeBody = document.getElementById('activeCaseBody');
+            if (active) {
+                activeIdSpan.innerText = active.id;
+
+                let crimesHtml = '';
+                active.crimes.forEach(crime => {
+                    crimesHtml += `<li>${crime}</li>`;
+                });
+
+                let userVote = null;
+                if (currentUser) {
+                    const key = `${currentUser}_${active.id}`;
+                    userVote = voteRecords[key] || null;
+                }
+
+                const timerExpired = isTimerExpired(active);
+                const votingDisabled = timerExpired || !currentUser || userVote !== null;
+                const canResetVotes = currentUser === 'Speaker of Supreme Court';
+                const result = getVoteResult(active);
+
+                activeBody.innerHTML = `
+                    <div class="defendant-name">⚡ ${active.defendant}</div>
+                    <ul class="crime-list">${crimesHtml}</ul>
+                    <div class="sentence-box">☭ SENTENCE: ${active.sentence}</div>
+                    <div class="timer-box ${timerExpired ? 'timer-expired' : 'timer-active'}">
+                        ⏱️ VOTING TIME: ${getTimerDisplay(active)}
+                        ${timerExpired ? '<br>⛔ VOTING CLOSED' : ''}
+                    </div>
+                    ${result ? `<div class="result-box ${result === 'PASSED' ? 'result-pass' : 'result-fail'}">📢 FINAL VERDICT: ${result}</div>` : ''}
+                    <div class="voting-hammer">
+                        <button class="vote-btn vote-yes" id="voteYesBtn" ${votingDisabled ? 'disabled' : ''}>✔ GUILTY</button>
+                        <button class="vote-btn vote-no" id="voteNoBtn" ${votingDisabled ? 'disabled' : ''}>✖ NOT GUILTY</button>
+                    </div>
+                    <div class="tally-board">
+                        <span class="tally-yes">☭ GUILTY: ${active.votesYes || 0}</span>
+                        <span class="tally-no">✖ NOT GUILTY: ${active.votesNo || 0}</span>
+                    </div>
+                    <button class="vote-btn vote-reset" id="resetVotesBtn" style="width:100%; margin-top:5px;" ${!canResetVotes ? 'disabled' : ''}>⟲ RESET VOTE (SPEAKER ONLY)</button>
+                    ${userVote ? `<div style="background:#4d0f0f; padding:10px; margin-top:10px; border:2px solid #ffb3b3; text-align:center;">✔ You voted: <strong>${userVote === 'yes' ? 'GUILTY' : 'NOT GUILTY'}</strong> on this case.</div>` : ''}
+                `;
+
+                document.getElementById('voteYesBtn')?.addEventListener('click', () => {
+                    if (!currentUser) { alert('Login first.'); return; }
+                    if (timerExpired) { alert('Voting has ended!'); return; }
+                    
+                    const key = `${currentUser}_${active.id}`;
+                    const records = loadVoteRecords();
+                    if (records[key]) {
+                        alert('You have already voted on this case!');
+                        renderEverything();
+                        return;
+                    }
+                    
+                    active.votesYes = (active.votesYes || 0) + 1;
+                    records[key] = 'yes';
+                    saveVoteRecords(records);
+                    
+                    addVoteToLog(currentUser, active.id, active.defendant, 'yes');
+                    updateFirebaseCases(courtCases);
+                });
+
+                document.getElementById('voteNoBtn')?.addEventListener('click', () => {
+                    if (!currentUser) { alert('Login first.'); return; }
+                    if (timerExpired) { alert('Voting has ended!'); return; }
+                    
+                    const key = `${currentUser}_${active.id}`;
+                    const records = loadVoteRecords();
+                    if (records[key]) {
+                        alert('You have already voted on this case!');
+                        renderEverything();
+                        return;
+                    }
+                    
+                    active.votesNo = (active.votesNo || 0) + 1;
+                    records[key] = 'no';
+                    saveVoteRecords(records);
+                    
+                    addVoteToLog(currentUser, active.id, active.defendant, 'no');
+                    updateFirebaseCases(courtCases);
+                });
+
+                document.getElementById('resetVotesBtn')?.addEventListener('click', () => {
+                    if (currentUser !== 'Speaker of Supreme Court') {
+                        alert('Only the Speaker can reset votes!');
+                        return;
+                    }
+                    if (confirm('Wipe all votes for this case?')) {
+                        active.votesYes = 0;
+                        active.votesNo = 0;
+                        active.timerEnd = null;
+                        const records = loadVoteRecords();
+                        const newRecords = {};
+                        for (let k in records) {
+                            if (!k.endsWith(`_${active.id}`)) {
+                                newRecords[k] = records[k];
+                            }
+                        }
+                        saveVoteRecords(newRecords);
+                        updateFirebaseCases(courtCases);
+                    }
+                });
+            } else {
+                activeBody.innerHTML = `<div style="padding:40px; text-align:center;">⚠ NO ACTIVE CASE — CREATE ONE</div>`;
+            }
+
+            updateLogStatus();
+            displayVoteLog();
+        }
+        
+        // --- render bills (keeping existing bill functionality)
+        function renderBills() {
+            const active = getActiveBill();
+            const voteRecords = loadBillVoteRecords();
+
+            const registryEl = document.getElementById('billRegistryList');
+            registryEl.innerHTML = '';
+            courtBills.forEach(b => {
+                const li = document.createElement('li');
+                li.className = b.active ? 'active-case' : '';
+                li.setAttribute('data-bill-id', b.id);
+                li.innerHTML = `<span class="case-id">№ ${b.id}</span> <span class="case-defendant">${b.title}</span>`;
+                li.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    courtBills.forEach(bb => bb.active = false);
+                    const targetBill = courtBills.find(bb => bb.id === b.id);
+                    if (targetBill) targetBill.active = true;
+                    updateFirebaseBills(courtBills);
+                });
+                registryEl.appendChild(li);
+            });
+
+            const activeIdSpan = document.getElementById('activeBillId');
+            const activeBody = document.getElementById('activeBillBody');
+            if (active) {
+                activeIdSpan.innerText = active.id;
+
+                let userVote = null;
+                if (currentUser) {
+                    const key = `${currentUser}_${active.id}`;
+                    userVote = voteRecords[key] || null;
+                }
+
+                const timerExpired = isTimerExpired(active);
+                const votingDisabled = timerExpired || !currentUser || userVote !== null;
+                const canResetVotes = currentUser === 'Speaker of Supreme Court';
+                const result = getVoteResult(active);
+
+                activeBody.innerHTML = `
+                    <div class="defendant-name">📜 ${active.title}</div>
+                    <div style="background:#2d0c0c; padding:20px; margin:20px 0; border-left:10px solid #a10022; font-size:1.3rem;">
+                        ${active.description}
+                    </div>
+                    <div style="background:#1e0101; padding:15px; margin:20px 0; border:2px dashed #b3003c; font-size:1.3rem;">
+                        ☭ PROPOSED BY: ${active.proposer}
+                    </div>
+                    <div class="timer-box ${timerExpired ? 'timer-expired' : 'timer-active'}">
+                        ⏱️ VOTING TIME: ${getTimerDisplay(active)}
+                        ${timerExpired ? '<br>⛔ VOTING CLOSED' : ''}
+                    </div>
+                    ${result ? `<div class="result-box ${result === 'PASSED' ? 'result-pass' : 'result-fail'}">📢 FINAL RESULT: BILL ${result}</div>` : ''}
+                    <div class="voting-hammer">
+                        <button class="vote-btn vote-yes" id="billVoteYesBtn" ${votingDisabled ? 'disabled' : ''}>✔ FOR</button>
+                        <button class="vote-btn vote-no" id="billVoteNoBtn" ${votingDisabled ? 'disabled' : ''}>✖ AGAINST</button>
+                    </div>
+                    <div class="tally-board">
+                        <span class="tally-yes">☭ FOR: ${active.votesYes || 0}</span>
+                        <span class="tally-no">✖ AGAINST: ${active.votesNo || 0}</span>
+                    </div>
+                    <button class="vote-btn vote-reset" id="resetBillVotesBtn" style="width:100%; margin-top:5px;" ${!canResetVotes ? 'disabled' : ''}>⟲ RESET VOTES (SPEAKER ONLY)</button>
+                    ${userVote ? `<div style="background:#4d0f0f; padding:10px; margin-top:10px; border:2px solid #ffb3b3; text-align:center;">✔ You voted: <strong>${userVote === 'yes' ? 'FOR' : 'AGAINST'}</strong> this bill.</div>` : ''}
+                `;
+
+                document.getElementById('billVoteYesBtn')?.addEventListener('click', () => {
+                    if (!currentUser) { alert('Login first.'); return; }
+                    if (timerExpired) { alert('Voting has ended!'); return; }
+                    
+                    const key = `${currentUser}_${active.id}`;
+                    const records = loadBillVoteRecords();
+                    if (records[key]) {
+                        alert('You have already voted on this bill!');
+                        renderBills();
+                        return;
+                    }
+                    
+                    active.votesYes = (active.votesYes || 0) + 1;
+                    records[key] = 'yes';
+                    saveBillVoteRecords(records);
+                    
+                    addVoteToLog(currentUser, active.id, active.title, 'yes', true);
+                    updateFirebaseBills(courtBills);
+                });
+
+                document.getElementById('billVoteNoBtn')?.addEventListener('click', () => {
+                    if (!currentUser) { alert('Login first.'); return; }
+                    if (timerExpired) { alert('Voting has ended!'); return; }
+                    
+                    const key = `${currentUser}_${active.id}`;
+                    const records = loadBillVoteRecords();
+                    if (records[key]) {
+                        alert('You have already voted on this bill!');
+                        renderBills();
+                        return;
+                    }
+                    
+                    active.votesNo = (active.votesNo || 0) + 1;
+                    records[key] = 'no';
+                    saveBillVoteRecords(records);
+                    
+                    addVoteToLog(currentUser, active.id, active.title, 'no', true);
+                    updateFirebaseBills(courtBills);
+                });
+
+                document.getElementById('resetBillVotesBtn')?.addEventListener('click', () => {
+                    if (currentUser !== 'Speaker of Supreme Court') {
+                        alert('Only the Speaker can reset votes!');
+                        return;
+                    }
+                    if (confirm('Wipe all votes for this bill?')) {
+                        active.votesYes = 0;
+                        active.votesNo = 0;
+                        active.timerEnd = null;
+                        const records = loadBillVoteRecords();
+                        const newRecords = {};
+                        for (let k in records) {
+                            if (!k.endsWith(`_${active.id}`)) {
+                                newRecords[k] = records[k];
+                            }
+                        }
+                        saveBillVoteRecords(newRecords);
+                        updateFirebaseBills(courtBills);
+                    }
+                });
+            } else {
+                activeBody.innerHTML = `<div style="padding:40px; text-align:center;">⚠ NO ACTIVE BILL — CREATE ONE</div>`;
+            }
+
+            updateLogStatus();
+            displayBillVoteLog();
+        }
+        
+        // --- render investigations
+        function renderInvestigations() {
+            const active = getActiveInvestigation();
+
+            // Render registry list
+            const registryEl = document.getElementById('investigationRegistryList');
+            registryEl.innerHTML = '';
+            investigations.forEach(i => {
+                const li = document.createElement('li');
+                li.className = i.active ? 'active-investigation' : '';
+                if (i.closed) li.classList.add('closed-investigation');
+                li.setAttribute('data-investigation-id', i.id);
+                li.innerHTML = `<span class="case-id investigation-id">№ ${i.id}</span> <span class="case-defendant">${i.title} ${i.closed ? '🔒 CLOSED' : ''}</span>`;
+                li.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    investigations.forEach(ii => ii.active = false);
+                    const target = investigations.find(ii => ii.id === i.id);
+                    if (target) target.active = true;
+                    updateFirebaseInvestigations(investigations);
+                });
+                registryEl.appendChild(li);
+            });
+
+            // active investigation panel
+            const activeIdSpan = document.getElementById('activeInvestigationId');
+            const activeBody = document.getElementById('activeInvestigationBody');
+            if (active) {
+                activeIdSpan.innerText = active.id;
+
+                // Build messages HTML
+                let messagesHtml = '';
+                if (active.messages) {
+                    const messageList = Object.values(active.messages).sort((a, b) => a.timestamp - b.timestamp);
+                    messageList.forEach(msg => {
+                        messagesHtml += `
+                            <div class="message">
+                                <span class="sender">${msg.sender}</span>
+                                <span class="time">${new Date(msg.timestamp).toLocaleTimeString()}</span>
+                                <div class="text">${msg.text}</div>
+                            </div>
+                        `;
+                    });
+                }
+
+                const canSendMessage = currentUser && !active.closed;
+                const canConvert = currentUser === 'Speaker of Supreme Court' && !active.closed;
+                const canEnd = currentUser === 'Speaker of Supreme Court' && !active.closed;
+
+                activeBody.innerHTML = `
+                    <div class="investigation-title">🔍 ${active.title}</div>
+                    <div style="background:#0a1a2a; padding:20px; margin:20px 0; border-left:10px solid #0088ff; font-size:1.3rem;">
+                        <strong>TARGET:</strong> ${active.target}<br>
+                        <strong>INITIAL FINDINGS:</strong> ${active.findings}
+                    </div>
+                    <div style="background:#1e3a5f; padding:15px; margin:20px 0; border:2px solid #0088ff; font-size:1.2rem;">
+                        📊 STATUS: ${active.closed ? '🔒 CLOSED' : '🔓 ONGOING'}
+                    </div>
+                    
+                    <div class="message-area" id="investigationMessages">
+                        ${messagesHtml || '<div style="color:#888; text-align:center;">No messages yet...</div>'}
+                    </div>
+                    
+                    ${canSendMessage ? `
+                        <div class="message-input-area">
+                            <input type="text" id="investigationMessageInput" class="message-input" placeholder="Type your findings or observations...">
+                            <button class="send-message-btn" id="sendInvestigationMessageBtn">SEND</button>
+                        </div>
+                    ` : ''}
+                    
+                    ${canConvert ? `
+                        <button class="convert-to-bill-btn" id="convertToBillBtn">📜 CONVERT TO COURT BILL</button>
+                    ` : ''}
+                    
+                    ${canEnd ? `
+                        <button class="end-investigation-btn" id="endInvestigationBtn">🔒 END INVESTIGATION</button>
+                    ` : ''}
+                `;
+
+                // Scroll messages to bottom
+                const msgArea = document.getElementById('investigationMessages');
+                if (msgArea) msgArea.scrollTop = msgArea.scrollHeight;
+
+                // Send message handler
+                document.getElementById('sendInvestigationMessageBtn')?.addEventListener('click', () => {
+                    const input = document.getElementById('investigationMessageInput');
+                    const text = input.value.trim();
+                    if (!text) return;
+                    
+                    if (!active.messages) active.messages = {};
+                    
+                    const messageId = Date.now().toString();
+                    active.messages[messageId] = {
+                        sender: currentUser,
+                        text: text,
+                        timestamp: Date.now()
+                    };
+                    
+                    addToInvestigationLog(currentUser, `📝 ${currentUser}: ${text}`, 'message');
+                    
+                    input.value = '';
+                    updateFirebaseInvestigations(investigations);
+                });
+
+                // Convert to bill handler
+                document.getElementById('convertToBillBtn')?.addEventListener('click', () => {
+                    if (!currentUser || currentUser !== 'Speaker of Supreme Court') {
+                        alert('Only the Speaker can convert investigations to bills!');
+                        return;
+                    }
+                    
+                    // Create new bill from investigation
+                    const maxId = Math.max(...courtBills.map(b => parseInt(b.id) || 0), 0);
+                    const newId = String(maxId + 1).padStart(3, '0');
+                    
+                    courtBills.forEach(b => b.active = false);
+                    
+                    const newBill = {
+                        id: newId,
+                        title: `INVESTIGATION: ${active.title}`,
+                        description: `Based on Investigation #${active.id}\n\nTarget: ${active.target}\nFindings: ${active.findings}`,
+                        proposer: 'Speaker of Supreme Court',
+                        votesYes: 0,
+                        votesNo: 0,
+                        active: true
+                    };
+                    
+                    courtBills.push(newBill);
+                    updateFirebaseBills(courtBills);
+                    
+                    addToInvestigationLog(currentUser, `📜 Investigation #${active.id} converted to Bill #${newId}`, 'status');
+                    
+                    alert(`Investigation converted to Bill #${newId}!`);
+                });
+
+                // End investigation handler
+                document.getElementById('endInvestigationBtn')?.addEventListener('click', () => {
+                    if (!currentUser || currentUser !== 'Speaker of Supreme Court') {
+                        alert('Only the Speaker can end investigations!');
+                        return;
+                    }
+                    
+                    if (confirm('End this investigation? This will close it permanently.')) {
+                        active.closed = true;
+                        updateFirebaseInvestigations(investigations);
+                        
+                        addToInvestigationLog(currentUser, `🔒 Investigation #${active.id} has been closed`, 'status');
+                    }
+                });
+
+            } else {
+                activeBody.innerHTML = `<div style="padding:40px; text-align:center;">⚠ NO ACTIVE INVESTIGATION — LAUNCH ONE</div>`;
+            }
+
+            updateInvestigationStatus();
+            displayInvestigationLog();
+        }
+
+        // --- create new case
+        document.getElementById('createCaseBtn').addEventListener('click', () => {
+            if (!currentUser) {
+                alert('You must be logged in to create a case.');
+                return;
+            }
+            
+            const def = document.getElementById('newDefendant').value.trim();
+            const crime1 = document.getElementById('newCrime1').value.trim();
+            const crime2 = document.getElementById('newCrime2').value.trim();
+            const sentence = document.getElementById('newSentence').value.trim();
+
+            if (!def || !crime1 || !sentence) {
+                alert('defendant, crime1 and sentence required');
+                return;
+            }
+            
+            const crimes = [crime1];
+            if (crime2) crimes.push(crime2);
+
+            const maxId = Math.max(...courtCases.map(c => parseInt(c.id) || 0), 0);
+            const newId = String(maxId + 1).padStart(3, '0');
+
+            courtCases.forEach(c => c.active = false);
+
+            const newCase = {
+                id: newId,
+                defendant: def,
+                crimes: crimes,
+                sentence: sentence,
+                votesYes: 0,
+                votesNo: 0,
+                active: true
+            };
+            
+            courtCases.push(newCase);
+            updateFirebaseCases(courtCases);
+            
+            document.getElementById('newDefendant').value = '';
+            document.getElementById('newCrime1').value = '';
+            document.getElementById('newCrime2').value = '';
+            document.getElementById('newSentence').value = '';
+        });
+        
+        // --- create new bill
+        document.getElementById('createBillBtn').addEventListener('click', () => {
+            if (!currentUser) {
+                alert('You must be logged in to propose a bill.');
+                return;
+            }
+            
+            const title = document.getElementById('newBillTitle').value.trim();
+            const desc = document.getElementById('newBillDesc').value.trim();
+            const proposer = document.getElementById('newBillProposer').value.trim() || currentUser;
+
+            if (!title || !desc) {
+                alert('Bill title and description required');
+                return;
+            }
+
+            const maxId = Math.max(...courtBills.map(b => parseInt(b.id) || 0), 0);
+            const newId = String(maxId + 1).padStart(3, '0');
+
+            courtBills.forEach(b => b.active = false);
+
+            const newBill = {
+                id: newId,
+                title: title,
+                description: desc,
+                proposer: proposer,
+                votesYes: 0,
+                votesNo: 0,
+                active: true
+            };
+            
+            courtBills.push(newBill);
+            updateFirebaseBills(courtBills);
+            
+            document.getElementById('newBillTitle').value = '';
+            document.getElementById('newBillDesc').value = '';
+            document.getElementById('newBillProposer').value = '';
+        });
+        
+        // --- create new investigation
+        document.getElementById('createInvestigationBtn').addEventListener('click', () => {
+            if (!currentUser) {
+                alert('You must be logged in to launch an investigation.');
+                return;
+            }
+            
+            const title = document.getElementById('newInvestigationTitle').value.trim();
+            const target = document.getElementById('newInvestigationTarget').value.trim();
+            const findings = document.getElementById('newInvestigationFindings').value.trim();
+
+            if (!title || !target) {
+                alert('Investigation title and target required');
+                return;
+            }
+
+            const maxId = Math.max(...investigations.map(i => parseInt(i.id) || 0), 0);
+            const newId = String(maxId + 1).padStart(3, '0');
+
+            investigations.forEach(i => i.active = false);
+
+            const newInvestigation = {
+                id: newId,
+                title: title,
+                target: target,
+                findings: findings || 'No initial findings',
+                messages: {},
+                closed: false,
+                active: true
+            };
+            
+            investigations.push(newInvestigation);
+            updateFirebaseInvestigations(investigations);
+            
+            addToInvestigationLog(currentUser, `🔍 Investigation #${newId} launched: ${title}`, 'status');
+            
+            document.getElementById('newInvestigationTitle').value = '';
+            document.getElementById('newInvestigationTarget').value = '';
+            document.getElementById('newInvestigationFindings').value = '';
+        });
+
+        // --- DELETE ALL CASES
+        document.getElementById('deleteAllCasesBtn')?.addEventListener('click', () => {
+            if (!currentUser || currentUser !== 'Speaker of Supreme Court') {
+                alert('Only the Speaker can delete all cases.');
+                return;
+            }
+            if (confirm('☭ DESTROY ALL CASE HISTORIES? This cannot be undone.')) {
+                casesRef.remove();
+                courtCases = [];
+                localStorage.removeItem(VOTE_RECORDS_KEY);
+                renderEverything();
+            }
+        });
+        
+        // --- DELETE ALL BILLS
+        document.getElementById('deleteAllBillsBtn')?.addEventListener('click', () => {
+            if (!currentUser || currentUser !== 'Speaker of Supreme Court') {
+                alert('Only the Speaker can delete all bills.');
+                return;
+            }
+            if (confirm('☭ DESTROY ALL BILL HISTORIES? This cannot be undone.')) {
+                billsRef.remove();
+                courtBills = [];
+                localStorage.removeItem(BILL_VOTE_RECORDS_KEY);
+                renderBills();
+            }
+        });
+        
+        // --- DELETE ALL INVESTIGATIONS
+        document.getElementById('deleteAllInvestigationsBtn')?.addEventListener('click', () => {
+            if (!currentUser || currentUser !== 'Speaker of Supreme Court') {
+                alert('Only the Speaker can delete all investigations.');
+                return;
+            }
+            if (confirm('☭ DESTROY ALL INVESTIGATIONS? This cannot be undone.')) {
+                investigationsRef.remove();
+                investigations = [];
+                renderInvestigations();
+            }
+        });
+
+        // Helper function for adding votes to log (for cases/bills)
+        function addVoteToLog(username, id, name, vote, isBill = false) {
+            if (!publicLogEnabled) return;
+            
+            if (isBill) {
+                const logEntry = {
+                    username: username,
+                    billId: id,
+                    billTitle: name,
+                    vote: vote,
+                    timestamp: Date.now()
+                };
+                billVoteLogRef.push(logEntry);
+                showNotification(username, `VOTED ${vote === 'yes' ? 'FOR' : 'AGAINST'} BILL #${id}`, false);
+            } else {
+                const logEntry = {
+                    username: username,
+                    caseId: id,
+                    caseDefendant: name,
+                    vote: vote,
+                    timestamp: Date.now()
+                };
+                voteLogRef.push(logEntry);
+                showNotification(username, `VOTED ${vote === 'yes' ? 'GUILTY' : 'NOT GUILTY'} ON CASE #${id}`, false);
+            }
+        }
+
+        // Initial render
+        updateLoginUI();
+        
+        // Timer update every minute
+        setInterval(() => {
+            if (currentTab === 'cases') renderEverything();
+            else if (currentTab === 'bills') renderBills();
+        }, 60000);
+    </script>
+</body>
+</html>        }
+
+        .parliament {
+            max-width: 1400px;
+            width: 100%;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .supreme-header {
+            border: 3px solid #b3002d;
+            background: #2e0a0a;
+            box-shadow: 0 0 30px #b3002d80;
+            padding: 20px 25px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            position: relative;
+        }
+
+        .supreme-header h1 {
+            font-size: 2.7rem;
+            font-weight: 900;
+            color: #ffcccc;
+            text-shadow: 4px 4px 0 #5a0000;
+            line-height: 1.2;
+        }
+
+        .supreme-header h1 small {
+            font-size: 1.2rem;
+            display: block;
+            letter-spacing: 8px;
+            color: #ff9191;
+            border-top: 1px dashed #a10022;
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 3rem;
+            color: #ff5e5e30;
+            font-family: 'Times New Roman', serif;
+            transform: rotate(10deg);
+            border: 3px double #ff5e5e30;
+            padding: 5px 15px;
+        }
+
+        /* notification popup */
         .vote-notification {
             position: fixed;
             top: 20px;
