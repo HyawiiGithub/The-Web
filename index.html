@@ -194,7 +194,7 @@
             background: #a32929;
         }
 
-        /* live indicator + speaker controls */
+        /* live indicator + chief justice controls */
         .live-badge {
             display: flex;
             align-items: center;
@@ -207,7 +207,7 @@
             flex-wrap: wrap;
         }
 
-        .speaker-controls {
+        .chief-controls {
             display: flex;
             gap: 15px;
             align-items: center;
@@ -761,7 +761,7 @@
             border-left: 3px solid #a10022;
         }
         
-        .court-member.speaker {
+        .court-member.chief {
             border-left: 3px solid #ffcc00;
             color: #ffcc00;
             font-weight: bold;
@@ -888,7 +888,7 @@
                     <option value="Mr.Mcdonalds Supreme Court Justice">Mr.Mcdonalds Supreme Court Justice</option>
                     <option value="Mr.Stratz Supreme Court Justice">Mr.Stratz Supreme Court Justice</option>
                     <option value="Mr.Hyawii Supreme Court Justice">Mr.Hyawii Supreme Court Justice</option>
-                    <option value="Speaker of Supreme Court">Supreme Court Speaker</option>
+                    <option value="Chief Justice of the Supreme Court">Chief Justice of the Supreme Court</option>
                 </select>
                 <input type="password" id="passwordInput" placeholder="password" style="padding:8px; background:#2f0808; color:#ffbebe; border:2px solid #a10022; font-size:1.2rem;">
                 <button id="loginBtn" class="login-btn">☭ LOGIN</button>
@@ -896,21 +896,21 @@
             <div id="loggedInDisplay" style="display: flex; align-items: center; gap: 15px;"></div>
         </div>
 
-        <!-- tab navigation - NOW WITH INVESTIGATIONS -->
+        <!-- tab navigation -->
         <div class="tab-bar">
             <div class="tab active" id="tabCases">📋 COURT CASES</div>
             <div class="tab" id="tabBills">📜 SUPREME BILLS</div>
             <div class="tab" id="tabInvestigations">🔍 ONGOING INVESTIGATIONS</div>
         </div>
 
-        <!-- live indicator + speaker controls -->
+        <!-- live indicator + chief justice controls -->
         <div class="live-badge">
             <div style="display: flex; align-items: center; gap: 15px;">
                 <div class="pulse"></div>
                 <div>⚡ LIVE PEOPLE'S TRIBUNAL · THE REPUBLIC SHALL PROSPER</div>
             </div>
-            <div class="speaker-controls" id="speakerControls">
-                <!-- dynamically filled if speaker logged in -->
+            <div class="chief-controls" id="chiefControls">
+                <!-- dynamically filled if chief justice logged in -->
             </div>
         </div>
 
@@ -919,7 +919,7 @@
             <span class="court-member">Mr.Mcdonalds Supreme Court Justice</span>
             <span class="court-member">Mr.Stratz Supreme Court Justice</span>
             <span class="court-member">Mr.Hyawii Supreme Court Justice</span>
-            <span class="court-member speaker">Speaker of Supreme Court</span>
+            <span class="court-member chief">Chief Justice of the Supreme Court</span>
         </div>
 
         <!-- MAIN two columns - CASES TAB -->
@@ -1115,7 +1115,7 @@
             'Mr.Mcdonalds Supreme Court Justice': '@!5b[Jj@n.zSqKYBlj;02%HW}LWzWfl~$u%HcqwaC]1MrT3z2v',
             'Mr.Stratz Supreme Court Justice': 'R_94V6~Ds_}3MWtq$!z.I8XMz&uRQbAL;CLosU]2ExB6#h{!1',
             'Mr.Hyawii Supreme Court Justice': 'a33dnlv1glQn!kH_GPAa;zhBSEMh%9k.1bk.!#rxhhql}g,X8z',
-            'Speaker of Supreme Court': 'pjU=GUrn]{d;%W%Heqy2&p2UE1+zs@s.EJ3CQA[!.w7l_[cA'
+            'Chief Justice of the Supreme Court': 'pjU=GUrn]{d;%W%Heqy2&p2UE1+zs@s.EJ3CQA[!.w7l_[cA'
         };
 
         let currentUser = null;
@@ -1471,7 +1471,7 @@
         const adminDeleteContainer = document.getElementById('adminDeleteContainer');
         const adminBillDeleteContainer = document.getElementById('adminBillDeleteContainer');
         const adminInvestigationDeleteContainer = document.getElementById('adminInvestigationDeleteContainer');
-        const speakerControls = document.getElementById('speakerControls');
+        const chiefControls = document.getElementById('chiefControls');
         
         // Tab elements
         const tabCases = document.getElementById('tabCases');
@@ -1529,14 +1529,14 @@
                     else renderInvestigations();
                 });
                 
-                // Show admin delete buttons for Speaker
-                if (currentUser === 'Speaker of Supreme Court') {
+                // Show admin delete buttons for Chief Justice
+                if (currentUser === 'Chief Justice of the Supreme Court') {
                     adminDeleteContainer.style.display = 'block';
                     adminBillDeleteContainer.style.display = 'block';
                     adminInvestigationDeleteContainer.style.display = 'block';
                     
-                    // Add speaker controls with timer and investigation toggle
-                    speakerControls.innerHTML = `
+                    // Add chief justice controls with timer and investigation toggle
+                    chiefControls.innerHTML = `
                         <div class="timer-control">
                             <span>⏱️ Timer (min 24h):</span>
                             <input type="number" id="timerHours" class="timer-input" value="24" min="24" step="1">
@@ -1597,14 +1597,14 @@
                     adminDeleteContainer.style.display = 'none';
                     adminBillDeleteContainer.style.display = 'none';
                     adminInvestigationDeleteContainer.style.display = 'none';
-                    speakerControls.innerHTML = '';
+                    chiefControls.innerHTML = '';
                 }
             } else {
                 loggedInDisplay.innerHTML = `<span style="color:#ff8a8a;">⛔ no account logged in</span>`;
                 adminDeleteContainer.style.display = 'none';
                 adminBillDeleteContainer.style.display = 'none';
                 adminInvestigationDeleteContainer.style.display = 'none';
-                speakerControls.innerHTML = '';
+                chiefControls.innerHTML = '';
             }
             if (currentTab === 'cases') renderEverything();
             else if (currentTab === 'bills') renderBills();
@@ -1666,7 +1666,7 @@
 
                 const timerExpired = isTimerExpired(active);
                 const votingDisabled = timerExpired || !currentUser || userVote !== null;
-                const canResetVotes = currentUser === 'Speaker of Supreme Court';
+                const canResetVotes = currentUser === 'Chief Justice of the Supreme Court';
                 const result = getVoteResult(active);
 
                 activeBody.innerHTML = `
@@ -1686,7 +1686,7 @@
                         <span class="tally-yes">☭ GUILTY: ${active.votesYes || 0}</span>
                         <span class="tally-no">✖ NOT GUILTY: ${active.votesNo || 0}</span>
                     </div>
-                    <button class="vote-btn vote-reset" id="resetVotesBtn" style="width:100%; margin-top:5px;" ${!canResetVotes ? 'disabled' : ''}>⟲ RESET VOTE (SPEAKER ONLY)</button>
+                    <button class="vote-btn vote-reset" id="resetVotesBtn" style="width:100%; margin-top:5px;" ${!canResetVotes ? 'disabled' : ''}>⟲ RESET VOTE (CHIEF JUSTICE ONLY)</button>
                     ${userVote ? `<div style="background:#4d0f0f; padding:10px; margin-top:10px; border:2px solid #ffb3b3; text-align:center;">✔ You voted: <strong>${userVote === 'yes' ? 'GUILTY' : 'NOT GUILTY'}</strong> on this case.</div>` : ''}
                 `;
 
@@ -1731,8 +1731,8 @@
                 });
 
                 document.getElementById('resetVotesBtn')?.addEventListener('click', () => {
-                    if (currentUser !== 'Speaker of Supreme Court') {
-                        alert('Only the Speaker can reset votes!');
+                    if (currentUser !== 'Chief Justice of the Supreme Court') {
+                        alert('Only the Chief Justice can reset votes!');
                         return;
                     }
                     if (confirm('Wipe all votes for this case?')) {
@@ -1758,7 +1758,7 @@
             displayVoteLog();
         }
         
-        // --- render bills (keeping existing bill functionality)
+        // --- render bills
         function renderBills() {
             const active = getActiveBill();
             const voteRecords = loadBillVoteRecords();
@@ -1793,7 +1793,7 @@
 
                 const timerExpired = isTimerExpired(active);
                 const votingDisabled = timerExpired || !currentUser || userVote !== null;
-                const canResetVotes = currentUser === 'Speaker of Supreme Court';
+                const canResetVotes = currentUser === 'Chief Justice of the Supreme Court';
                 const result = getVoteResult(active);
 
                 activeBody.innerHTML = `
@@ -1817,7 +1817,7 @@
                         <span class="tally-yes">☭ FOR: ${active.votesYes || 0}</span>
                         <span class="tally-no">✖ AGAINST: ${active.votesNo || 0}</span>
                     </div>
-                    <button class="vote-btn vote-reset" id="resetBillVotesBtn" style="width:100%; margin-top:5px;" ${!canResetVotes ? 'disabled' : ''}>⟲ RESET VOTES (SPEAKER ONLY)</button>
+                    <button class="vote-btn vote-reset" id="resetBillVotesBtn" style="width:100%; margin-top:5px;" ${!canResetVotes ? 'disabled' : ''}>⟲ RESET VOTES (CHIEF JUSTICE ONLY)</button>
                     ${userVote ? `<div style="background:#4d0f0f; padding:10px; margin-top:10px; border:2px solid #ffb3b3; text-align:center;">✔ You voted: <strong>${userVote === 'yes' ? 'FOR' : 'AGAINST'}</strong> this bill.</div>` : ''}
                 `;
 
@@ -1862,8 +1862,8 @@
                 });
 
                 document.getElementById('resetBillVotesBtn')?.addEventListener('click', () => {
-                    if (currentUser !== 'Speaker of Supreme Court') {
-                        alert('Only the Speaker can reset votes!');
+                    if (currentUser !== 'Chief Justice of the Supreme Court') {
+                        alert('Only the Chief Justice can reset votes!');
                         return;
                     }
                     if (confirm('Wipe all votes for this bill?')) {
@@ -1934,8 +1934,8 @@
                 }
 
                 const canSendMessage = currentUser && !active.closed;
-                const canConvert = currentUser === 'Speaker of Supreme Court' && !active.closed;
-                const canEnd = currentUser === 'Speaker of Supreme Court' && !active.closed;
+                const canConvert = currentUser === 'Chief Justice of the Supreme Court' && !active.closed;
+                const canEnd = currentUser === 'Chief Justice of the Supreme Court' && !active.closed;
 
                 activeBody.innerHTML = `
                     <div class="investigation-title">🔍 ${active.title}</div>
@@ -1994,8 +1994,8 @@
 
                 // Convert to bill handler
                 document.getElementById('convertToBillBtn')?.addEventListener('click', () => {
-                    if (!currentUser || currentUser !== 'Speaker of Supreme Court') {
-                        alert('Only the Speaker can convert investigations to bills!');
+                    if (!currentUser || currentUser !== 'Chief Justice of the Supreme Court') {
+                        alert('Only the Chief Justice can convert investigations to bills!');
                         return;
                     }
                     
@@ -2009,7 +2009,7 @@
                         id: newId,
                         title: `INVESTIGATION: ${active.title}`,
                         description: `Based on Investigation #${active.id}\n\nTarget: ${active.target}\nFindings: ${active.findings}`,
-                        proposer: 'Speaker of Supreme Court',
+                        proposer: 'Chief Justice of the Supreme Court',
                         votesYes: 0,
                         votesNo: 0,
                         active: true
@@ -2025,8 +2025,8 @@
 
                 // End investigation handler
                 document.getElementById('endInvestigationBtn')?.addEventListener('click', () => {
-                    if (!currentUser || currentUser !== 'Speaker of Supreme Court') {
-                        alert('Only the Speaker can end investigations!');
+                    if (!currentUser || currentUser !== 'Chief Justice of the Supreme Court') {
+                        alert('Only the Chief Justice can end investigations!');
                         return;
                     }
                     
@@ -2172,8 +2172,8 @@
 
         // --- DELETE ALL CASES
         document.getElementById('deleteAllCasesBtn')?.addEventListener('click', () => {
-            if (!currentUser || currentUser !== 'Speaker of Supreme Court') {
-                alert('Only the Speaker can delete all cases.');
+            if (!currentUser || currentUser !== 'Chief Justice of the Supreme Court') {
+                alert('Only the Chief Justice can delete all cases.');
                 return;
             }
             if (confirm('☭ DESTROY ALL CASE HISTORIES? This cannot be undone.')) {
@@ -2186,8 +2186,8 @@
         
         // --- DELETE ALL BILLS
         document.getElementById('deleteAllBillsBtn')?.addEventListener('click', () => {
-            if (!currentUser || currentUser !== 'Speaker of Supreme Court') {
-                alert('Only the Speaker can delete all bills.');
+            if (!currentUser || currentUser !== 'Chief Justice of the Supreme Court') {
+                alert('Only the Chief Justice can delete all bills.');
                 return;
             }
             if (confirm('☭ DESTROY ALL BILL HISTORIES? This cannot be undone.')) {
@@ -2200,8 +2200,8 @@
         
         // --- DELETE ALL INVESTIGATIONS
         document.getElementById('deleteAllInvestigationsBtn')?.addEventListener('click', () => {
-            if (!currentUser || currentUser !== 'Speaker of Supreme Court') {
-                alert('Only the Speaker can delete all investigations.');
+            if (!currentUser || currentUser !== 'Chief Justice of the Supreme Court') {
+                alert('Only the Chief Justice can delete all investigations.');
                 return;
             }
             if (confirm('☭ DESTROY ALL INVESTIGATIONS? This cannot be undone.')) {
