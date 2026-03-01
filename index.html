@@ -36,6 +36,81 @@
             transform: rotate(-5deg);
         }
 
+        /* Live Viewer Eye Icon */
+        .viewer-eye {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff2222;
+            border-radius: 30px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .viewer-eye:hover {
+            background: rgba(50, 0, 0, 0.9);
+            border-color: #ff6666;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+        }
+
+        .eye-icon {
+            font-size: 1.5rem;
+            animation: blink 3s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            48%, 52% { opacity: 0.3; }
+        }
+
+        .viewer-count {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffaaaa;
+            min-width: 30px;
+            text-align: center;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        .viewer-tooltip {
+            position: absolute;
+            top: -30px;
+            right: 0;
+            background: #2a0303;
+            border: 1px solid #ff2222;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            color: #ffb3b3;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .viewer-eye:hover .viewer-tooltip {
+            opacity: 1;
+        }
+
+        @keyframes countPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); color: #ff6666; }
+            100% { transform: scale(1); }
+        }
+
+        .count-pulse {
+            animation: countPulse 0.5s ease;
+        }
+
         .parliament {
             max-width: 1400px;
             width: 100%;
@@ -748,23 +823,32 @@
             background: #1f0404;
             border: 2px solid #b30045;
             border-top: none;
-            padding: 10px 15px;
+            padding: 0;
             display: flex;
-            gap: 20px;
             flex-wrap: wrap;
             font-size: 1.1rem;
         }
         
         .court-member {
-            color: #ffb3b3;
-            padding: 3px 10px;
+            flex: 1 1 auto;
+            padding: 12px 20px;
+            margin: 0;
             border-left: 3px solid #a10022;
+        }
+        
+        .court-member:nth-child(odd) {
+            background: #2d0c0c;
+        }
+        
+        .court-member:nth-child(even) {
+            background: #3f1a1a;
         }
         
         .court-member.chief {
             border-left: 3px solid #ffcc00;
             color: #ffcc00;
             font-weight: bold;
+            background: #4d2a2a;
         }
 
         .new-case-form {
@@ -864,95 +948,19 @@
             padding: 3px 12px;
             margin-right: 10px;
         }
-        /* Live Viewer Eye Icon */
-.viewer-eye {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background: rgba(0, 0, 0, 0.7);
-    border: 2px solid #ff2222;
-    border-radius: 30px;
-    padding: 8px 15px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
-}
-
-.viewer-eye:hover {
-    background: rgba(50, 0, 0, 0.9);
-    border-color: #ff6666;
-    transform: scale(1.05);
-    box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
-}
-
-.eye-icon {
-    font-size: 1.5rem;
-    animation: blink 3s infinite;
-}
-
-@keyframes blink {
-    0%, 50%, 100% { opacity: 1; }
-    48%, 52% { opacity: 0.3; }
-}
-
-.viewer-count {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #ffaaaa;
-    min-width: 30px;
-    text-align: center;
-    text-shadow: 0 0 10px #ff0000;
-}
-
-.viewer-tooltip {
-    position: absolute;
-    top: -30px;
-    right: 0;
-    background: #2a0303;
-    border: 1px solid #ff2222;
-    padding: 5px 10px;
-    font-size: 0.8rem;
-    color: #ffb3b3;
-    border-radius: 5px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-    white-space: nowrap;
-}
-
-.viewer-eye:hover .viewer-tooltip {
-    opacity: 1;
-}
-
-/* Pulse animation for count changes */
-@keyframes countPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.3); color: #ff6666; }
-    100% { transform: scale(1); }
-}
-
-.count-pulse {
-    animation: countPulse 0.5s ease;
-}
     </style>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
+    <!-- Live Viewer Eye Icon -->
+    <div class="viewer-eye" id="viewerEye">
+        <div class="eye-icon">👁️</div>
+        <div class="viewer-count" id="viewerCount">0</div>
+        <div class="viewer-tooltip">ACTIVE JUSTICES</div>
+    </div>
 
-<!-- Live Viewer Counter - Eye Icon -->
-<div class="viewer-eye" id="viewerEye">
-    <div class="eye-icon">👁️</div>
-    <div class="viewer-count" id="viewerCount">0</div>
-    <div class="viewer-tooltip">ACTIVE JUSTICES | ACTIVE WATCHERS/VISITORS</div>
-</div>
-    
     <div class="parliament">
 
         <!-- header -->
@@ -988,7 +996,7 @@
 
         <!-- live indicator + chief justice controls -->
         <div class="live-badge">
-            <div style="display: flex; align-items: center; gap: 15px;">
+            <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                 <div class="pulse"></div>
                 <div>⚡ LIVE PEOPLE'S TRIBUNAL · THE REPUBLIC SHALL PROSPER</div>
             </div>
@@ -1002,7 +1010,7 @@
             <span class="court-member">Mr.Mcdonalds Supreme Court Justice</span>
             <span class="court-member">Mr.Stratz Supreme Court Justice</span>
             <span class="court-member">Mr.Hyawii Supreme Court Justice</span>
-            <span class="court-member chief">Mr.Hyawii Chief Justice of the Supreme Court</span>
+            <span class="court-member chief">Chief Justice of the Supreme Court</span>
         </div>
 
         <!-- MAIN two columns - CASES TAB -->
@@ -1178,84 +1186,6 @@
     <div id="notificationContainer"></div>
 
     <script>
-        // ================== LIVE VIEWER COUNT =====================
-const activeViewersRef = database.ref('activeViewers');
-let viewerPresenceRef;
-let viewerSessionId = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-
-// Initialize viewer tracking
-function initViewerTracking() {
-    // Remove old session if exists
-    viewerPresenceRef = database.ref('activeViewers/' + viewerSessionId);
-    
-    // Set viewer as active with timestamp
-    viewerPresenceRef.set({
-        timestamp: Date.now(),
-        user: currentUser || 'anonymous'
-    });
-    
-    // Update timestamp every 10 seconds to show still active
-    const interval = setInterval(() => {
-        if (viewerPresenceRef) {
-            viewerPresenceRef.update({
-                timestamp: Date.now()
-            });
-        }
-    }, 10000);
-    
-    // Clean up on page unload
-    window.addEventListener('beforeunload', () => {
-        clearInterval(interval);
-        if (viewerPresenceRef) {
-            viewerPresenceRef.remove();
-        }
-    });
-}
-
-// Clean up stale viewers (older than 20 seconds)
-setInterval(() => {
-    const cutoff = Date.now() - 20000;
-    activeViewersRef.once('value', (snapshot) => {
-        snapshot.forEach((child) => {
-            if (child.val().timestamp < cutoff) {
-                child.ref.remove();
-            }
-        });
-    });
-}, 5000);
-
-// Update viewer count with animation
-let lastCount = 0;
-activeViewersRef.on('value', (snapshot) => {
-    const count = snapshot.numChildren();
-    const countElement = document.getElementById('viewerCount');
-    
-    // Add pulse animation if count changed
-    if (count !== lastCount) {
-        countElement.classList.add('count-pulse');
-        setTimeout(() => {
-            countElement.classList.remove('count-pulse');
-        }, 500);
-    }
-    
-    countElement.textContent = count;
-    lastCount = count;
-});
-
-// Initialize tracking on page load
-initViewerTracking();
-
-// Re-initialize on login/logout (update user info)
-const originalUpdateLoginUI = updateLoginUI;
-updateLoginUI = function() {
-    originalUpdateLoginUI();
-    // Update viewer info with username
-    if (viewerPresenceRef && currentUser) {
-        viewerPresenceRef.update({
-            user: currentUser
-        });
-    }
-};
         // ================== FIREBASE INIT =====================
         const firebaseConfig = {
             apiKey: "AIzaSyBwDpAdLqHdoFPUt0Ovy4uG-MFd0WIrY2w",
@@ -1292,8 +1222,70 @@ updateLoginUI = function() {
         const publicLogEnabledRef = database.ref('publicLogEnabled');
         const investigationPublicRef = database.ref('investigationPublic');
         
+        // ================== LIVE VIEWER COUNTER =====================
+        const activeViewersRef = database.ref('activeViewers');
+        let viewerPresenceRef;
+        let viewerSessionId = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        
+        // Initialize viewer tracking
+        function initViewerTracking() {
+            viewerPresenceRef = database.ref('activeViewers/' + viewerSessionId);
+            
+            viewerPresenceRef.set({
+                timestamp: Date.now(),
+                user: currentUser || 'anonymous'
+            });
+            
+            const interval = setInterval(() => {
+                if (viewerPresenceRef) {
+                    viewerPresenceRef.update({
+                        timestamp: Date.now()
+                    });
+                }
+            }, 10000);
+            
+            window.addEventListener('beforeunload', () => {
+                clearInterval(interval);
+                if (viewerPresenceRef) {
+                    viewerPresenceRef.remove();
+                }
+            });
+        }
+        
+        // Clean up stale viewers
+        setInterval(() => {
+            const cutoff = Date.now() - 20000;
+            activeViewersRef.once('value', (snapshot) => {
+                snapshot.forEach((child) => {
+                    if (child.val().timestamp < cutoff) {
+                        child.ref.remove();
+                    }
+                });
+            });
+        }, 5000);
+        
+        // Update viewer count with animation
+        let lastCount = 0;
+        activeViewersRef.on('value', (snapshot) => {
+            const count = snapshot.numChildren();
+            const countElement = document.getElementById('viewerCount');
+            if (countElement) {
+                if (count !== lastCount) {
+                    countElement.classList.add('count-pulse');
+                    setTimeout(() => {
+                        countElement.classList.remove('count-pulse');
+                    }, 500);
+                }
+                countElement.textContent = count;
+                lastCount = count;
+            }
+        });
+        
+        // Start viewer tracking immediately
+        initViewerTracking();
+        
         // Timer settings
-        const MIN_TIMER_HOURS = 24; // Minimum 24 hours
+        const MIN_TIMER_HOURS = 24;
         const DEFAULT_TIMER_HOURS = 24;
         
         // Local state
@@ -1682,14 +1674,21 @@ updateLoginUI = function() {
                     <span class="logged-user">☭ ${currentUser}</span>
                     <button class="logout-btn" id="logoutBtn">✖ LOGOUT</button>
                 `;
-document.getElementById('logoutBtn')?.addEventListener('click', () => {
-    if (viewerPresenceRef) viewerPresenceRef.remove();
-    currentUser = null;
-    updateLoginUI();
-    if (currentTab === 'cases') renderEverything();
-    else if (currentTab === 'bills') renderBills();
-    else renderInvestigations();
-});
+                document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                    if (viewerPresenceRef) viewerPresenceRef.remove();
+                    currentUser = null;
+                    updateLoginUI();
+                    if (currentTab === 'cases') renderEverything();
+                    else if (currentTab === 'bills') renderBills();
+                    else renderInvestigations();
+                });
+                
+                // Update viewer with username
+                if (viewerPresenceRef) {
+                    viewerPresenceRef.update({
+                        user: currentUser
+                    });
+                }
                 
                 // Show admin delete buttons for Chief Justice
                 if (currentUser === 'Chief Justice of the Supreme Court') {
@@ -1780,8 +1779,13 @@ document.getElementById('logoutBtn')?.addEventListener('click', () => {
             if (ACCOUNT_PASSWORDS[selectedUser] && ACCOUNT_PASSWORDS[selectedUser] === pwd) {
                 currentUser = selectedUser;
                 passwordInput.value = '';
+                // Update viewer with username
+                if (viewerPresenceRef) {
+                    viewerPresenceRef.update({
+                        user: currentUser
+                    });
+                }
                 updateLoginUI();
-                initViewerTracking();
             } else {
                 alert('❌ invalid password');
             }
